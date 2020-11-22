@@ -4,12 +4,14 @@ import { AppService } from './app.service';
 import { AppConfigModule } from '../../config/app';
 import { MysqlConfigModule } from 'config/database/mysql';
 import { SalesloftConfigModule } from 'config/vendors/salesloft';
+import { PeopleModule } from 'modules/people';
 
 @Module({
   imports: [
     AppConfigModule, 
     MysqlConfigModule, 
-    SalesloftConfigModule
+    SalesloftConfigModule,
+    PeopleModule
   ],
   controllers: [AppController],
   providers: [AppService],

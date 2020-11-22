@@ -6,7 +6,9 @@ import { SalesloftPeopleService } from 'providers/vendors/salesloft/people/peopl
 export class PeopleService {
   constructor(private readonly peopleAPIService : SalesloftPeopleService) {}
 
-  async list(page:number = 1, sortBy:string = 'email', sortDirection:string = 'ASC') {
-    return this.peopleAPIService.list(page,sortBy,sortDirection).toPromise();
+  async list(page:number , resultsPerPage:number, sortBy:string, sortDirection:string) {
+    const response = await this.peopleAPIService.list({page,per_page:resultsPerPage,sort_by:sortBy, sort_direction:sortDirection}).toPromise();
+
+    return response.data;
   }
 }
