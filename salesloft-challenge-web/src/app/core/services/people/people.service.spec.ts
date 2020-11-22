@@ -60,7 +60,7 @@ describe('PeopleService', () => {
       (peopleService: PeopleService, backend: HttpTestingController) => {
 
         peopleService.getPeopleList(0).subscribe((data: any) => {
-          expect(data).toBe(undefined);
+          expect(data).toEqual({error:"Invalid params"});
         });
 
         // Set up

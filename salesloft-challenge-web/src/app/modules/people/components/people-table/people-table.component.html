@@ -1,0 +1,31 @@
+<div class="container-fluid">
+    <div class="row">
+        <table mat-table id="people-table" [dataSource]="dataSource" class="mat-elevation-z8 col-12 col-md-8 mx-auto">
+
+            <!--- Note that these columns can be defined in any order.
+                  The actual rendered columns are set as a property on the row definition" -->
+
+            <!-- Email Column -->
+            <ng-container matColumnDef="email_address">
+                <th mat-header-cell *matHeaderCellDef>Email Address</th>
+                <td mat-cell *matCellDef="let element"> {{element.email_Address}} </td>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef> Name </th>
+                <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+            </ng-container>
+
+            <!-- Weight Column -->
+            <ng-container matColumnDef="job_role">
+                <th mat-header-cell *matHeaderCellDef> Job Role </th>
+                <td mat-cell *matCellDef="let element"> {{element.job_role}} </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+    </div>
+
+</div>

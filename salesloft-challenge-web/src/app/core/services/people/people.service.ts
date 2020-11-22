@@ -24,8 +24,8 @@ export class PeopleService {
    * @param page 
    * @param per_page 
    */
-  getPeopleList (page?:number,per_page?:number): Observable<People[]> {
-    const url = `${this.apiUrl}/people/list/}`;
+  getPeopleList (page?:number,per_page?:number): Observable<any> {
+    const url = `${this.apiUrl}/people/list`;
     let params = new HttpParams();
 
     params = (page ? params.append('page',`${page}`) : params);

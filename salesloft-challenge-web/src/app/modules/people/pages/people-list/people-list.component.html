@@ -1,0 +1,12 @@
+<div class="container-fluid mt-5 h-75">
+    <div class="container text-center">
+      <h2>People List</h2>
+    </div>
+    <hr/>
+    <h6 class="font-error text-center" *ngIf="peopleListErrorMsg">{{peopleListErrorMsg}}</h6>
+    <!--Table component-->
+    <app-people-table [elements]="elements"></app-people-table>
+    
+  
+  </div>
+  
