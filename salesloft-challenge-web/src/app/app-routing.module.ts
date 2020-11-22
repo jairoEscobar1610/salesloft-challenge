@@ -5,7 +5,7 @@ import { PageNotFoundComponent } from './core/page-not-found/page-not-found.comp
 const routes: Routes = [
   { path: '', redirectTo:'/home', pathMatch:'full'},
   { path: '**', component: PageNotFoundComponent },
-  { path: 'home', loadChildren: () => import('./features/home/home.module').then(m => m.HomeModule) }];
+  { path: 'home', loadChildren: () => import('./modules/home/home.module').then(m => m.HomeModule) }];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
