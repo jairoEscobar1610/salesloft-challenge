@@ -20,13 +20,11 @@ export class PeopleService {
     private logger: LoggerService) { }
 
   /**
-   * @description Get list of urls
-   * @param noOfElements 
+   * @description Get list of people
    * @param page 
-   * @param sortBy 
-   * @param sortType asc or desc
+   * @param per_page 
    */
-  getUrlList (page:number,per_page:number): Observable<People[]> {
+  getPeopleList (page?:number,per_page?:number): Observable<People[]> {
     const url = `${this.apiUrl}/people/list/}`;
     let params = new HttpParams();
 
