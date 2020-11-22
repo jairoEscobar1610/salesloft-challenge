@@ -8,6 +8,12 @@ import { PeopleService } from './people.service';
 @ApiTags('people')
 export class PeopleController {
     constructor(private readonly peopleService : PeopleService){}
+
+    /**
+     * Get People List using Salesloft API
+     * @param query : PeopleListDTO
+     * @returns response<People[]>
+     */
     @Get('list')
     @ApiResponse({ status: 200, description: 'Successful Response' })
     @ApiResponse({ status: 400, description: 'Bad Request' })
