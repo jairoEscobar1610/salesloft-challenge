@@ -37,7 +37,6 @@ describe('PeopleService', () => {
           });
 
           // Set up
-          const peopleUrl = `${peopleService.apiUrl}/people`;
           const responseObject = [{
             id:1,
             name:"Test",
@@ -46,7 +45,7 @@ describe('PeopleService', () => {
           }];
           // End Setup
 
-          const requestWrapper = backend.expectOne(`${peopleService.apiUrl}/list`);
+          const requestWrapper = backend.expectOne(`${peopleService.apiUrl}/people/list`);
           requestWrapper.flush(responseObject);
           expect(requestWrapper.request.method).toEqual('GET');
 
@@ -65,11 +64,10 @@ describe('PeopleService', () => {
         });
 
         // Set up
-        const url = `${peopleService.apiUrl}/people`;
         const responseObject = {
           error:"Invalid params"
         };
-        const requestWrapper = backend.expectOne(`${peopleService.apiUrl}/list`);
+        const requestWrapper = backend.expectOne(`${peopleService.apiUrl}/people/list`);
         requestWrapper.flush(responseObject);
         expect(requestWrapper.request.method).toEqual('GET');
 
