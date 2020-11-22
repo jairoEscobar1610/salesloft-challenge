@@ -2,15 +2,15 @@ import { IDeserializable } from './deserializable.interface';
 
 export class People implements IDeserializable {
     id?: number;
-    name?:string;
+    display_name?:string;
     email_address?: string;
-    job_role?:string;
+    title?:string;
 
-    constructor(id:number, name:string, email_address:string, job_role:string){
+    constructor(id:number, display_name:string, email_address:string, title:string){
         this.id = id;
-        this.name = name;
+        this.display_name = display_name;
         this.email_address = email_address;
-        this.job_role = job_role;
+        this.title = title;
     }
 
     /**

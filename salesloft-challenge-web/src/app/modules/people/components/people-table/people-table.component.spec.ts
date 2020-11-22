@@ -20,7 +20,7 @@ describe('PeopleTableComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(PeopleTableComponent);
     component = fixture.componentInstance;
-    component.elements = mockPeopleList;
+    component.dataSource = mockPeopleList;
     fixture.detectChanges();
   });
 
@@ -28,13 +28,15 @@ describe('PeopleTableComponent', () => {
     expect(component).toBeTruthy();
   });
   it('should bind list of people with details', async() => {
-    expect(component.elements[0].id === 1).toBeTruthy();
-    expect(component.elements.length).toBe(10);
+    expect(component.dataSource[0].id === 1).toBeTruthy();
+    expect(component.dataSource.length).toBe(10);
   });
 
   it('should display all the people on the table', async () => {
     
     let fixture = TestBed.createComponent(PeopleTableComponent);
+    component = fixture.componentInstance;
+    component.setDataSource(mockPeopleList);
     fixture.detectChanges();
     fixture.whenStable().then(() => {
       fixture.detectChanges();
@@ -56,8 +58,7 @@ describe('PeopleTableComponent', () => {
         .children.map(header=>
             header.nativeElement.innerHTML.trim()
           );
-      console.log(tableHeaders);
-      expect(tableHeaders).toEqual(['Email Address','Name','Job Role']);
+      expect(tableHeaders).toEqual(['Email Address','Name','Job Title']);
       
     });
     
