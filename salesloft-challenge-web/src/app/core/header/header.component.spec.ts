@@ -19,7 +19,7 @@ describe('HeaderComponent', () => {
       declarations: [ HeaderComponent,MockLoaderComponent, MockComponent ],
       imports:[HttpClientModule,RouterTestingModule.withRoutes([
         { path: 'home',component:MockComponent },{path:"people", component:MockComponent},
-        {path:"count", component:MockComponent},{path:"duplicates", component:MockComponent}
+        {path:"character-frequency", component:MockComponent},{path:"duplicates", component:MockComponent}
        ]) ]
     })
     .compileComponents();
@@ -59,15 +59,15 @@ describe('HeaderComponent', () => {
     });
    
   })));
-  it('Header should navigate on click - count', waitForAsync(
+  it('Header should navigate on click - character-frequency', waitForAsync(
     inject([Router, Location], (router: Router, location: Location) => {
 
     let fixture = TestBed.createComponent(HeaderComponent);
     fixture.detectChanges();
 
-    fixture.debugElement.query(By.css("a[id='count-link']")).nativeElement.click();
+    fixture.debugElement.query(By.css("a[id='character-frequency-link']")).nativeElement.click();
     fixture.whenStable().then(() => {
-      expect(location.path()).toEqual('/count');
+      expect(location.path()).toEqual('/character-frequency');
     });
    
   })));

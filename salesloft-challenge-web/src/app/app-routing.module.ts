@@ -6,6 +6,7 @@ const routes: Routes = [
   { path: '', redirectTo:'/home', pathMatch:'full'},
   { path: 'home', loadChildren: () => import('./modules/home/home.module').then(m => m.HomeModule) },
   { path: 'people', loadChildren: () => import('./modules/people/people.module').then(m => m.PeopleModule) },
+  { path: 'character-frequency', loadChildren: () => import('./modules/character-frequency/character-frequency.module').then(m => m.CharacterFrequencyModule) },
   { path: '**', component: PageNotFoundComponent }];
 
 @NgModule({
