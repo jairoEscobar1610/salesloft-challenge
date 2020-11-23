@@ -12,7 +12,7 @@ const queryString = require('query-string');
 export class SalesloftPeopleService implements IPeople{
     constructor(private httpService: HttpService, private salesloftConfig : SalesloftConfigService){}
 
-    list(params : PeopleListDTO):Observable<AxiosResponse<People[]>> {
+    list(params : PeopleListDTO):Observable<AxiosResponse<any>> {
         const stringParams = queryString.stringify({...params,include_paging_counts:'true'});
         return this.httpService.get(`${this.salesloftConfig.apiUrl}people.json?${stringParams}`);
     }
