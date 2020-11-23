@@ -67,6 +67,15 @@ describe('PeopleController', () => {
         {'key':'@', 'frequency':3},{'key':'e', 'frequency':2},{'key':'y', 'frequency':1}
       ]);
     });
+
+    it('should return an empty frequency array when people API responds with empty data', async () => {
+      //Prepare test payload
+      const result = {
+        metadata: { paging: {total_pages:1, current_page:1}},
+        data:[]};
+      jest.spyOn(peopleService,'list').mockImplementation(async ()=> result);
+      expect(await peopleCotroller.getCharacterFrequency()).toEqual([]);
+    });
   })
 
   

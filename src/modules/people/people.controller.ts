@@ -81,8 +81,6 @@ export class PeopleController {
                 {concurrency:20}
             );
 
-            
-
            
             //Transform resultset into array to be sorted O(n)
             let arraySet = Object.keys(resultSet.frequency).map(key=>({key,frequency:resultSet.frequency[key]}));
