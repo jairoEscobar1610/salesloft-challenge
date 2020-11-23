@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { CacheModule, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AppConfigModule } from '../../config/app';
@@ -11,7 +11,8 @@ import { PeopleModule } from 'modules/people';
     AppConfigModule, 
     MysqlConfigModule, 
     SalesloftConfigModule,
-    PeopleModule
+    PeopleModule,
+    CacheModule.register()
   ],
   controllers: [AppController],
   providers: [AppService],

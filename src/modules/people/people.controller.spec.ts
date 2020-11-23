@@ -4,7 +4,7 @@ import { SalesloftProviderModule } from 'providers/vendors/salesloft/salesloft.m
 import { PeopleController } from './people.controller';
 import { PeopleService } from './people.service';
 import { People } from "./../../common/models/people.model";
-import { HttpException } from '@nestjs/common';
+import { CacheModule, HttpException } from '@nestjs/common';
 import { of } from 'rxjs';
 
 describe('PeopleController', () => {
@@ -13,7 +13,7 @@ describe('PeopleController', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports:[SalesloftProviderModule],
+      imports:[SalesloftProviderModule, CacheModule.register()],
       controllers: [PeopleController],
       providers: [PeopleService]
     }).compile();
@@ -58,10 +58,10 @@ describe('PeopleController', () => {
   describe('getCharacterFrequency', () => {
     it('should return the correct frequency for a given response', async () => {
       //Prepare test payload
-      const result = {
+      const result = [{
         metadata: { paging: {total_pages:1, current_page:1}},
-        data:[{email_address:'a@e'},{email_address:'a@y'},{email_address:'a@a.a.a.e.a'}]};
-      jest.spyOn(peopleService,'list').mockImplementation(async ()=> result);
+        data:[{email_address:'a@e'},{email_address:'a@y'},{email_address:'a@a.a.a.e.a'}]}];
+      jest.spyOn(peopleService,'listAll').mockImplementation(async ()=> result);
       expect(await peopleCotroller.getCharacterFrequency()).toEqual([
         {'key':'a', 'frequency':7},{'key':'.', 'frequency':4},
         {'key':'@', 'frequency':3},{'key':'e', 'frequency':2},{'key':'y', 'frequency':1}
@@ -70,10 +70,10 @@ describe('PeopleController', () => {
 
     it('should return an empty frequency array when people API responds with empty data', async () => {
       //Prepare test payload
-      const result = {
+      const result = [{
         metadata: { paging: {total_pages:1, current_page:1}},
-        data:[]};
-      jest.spyOn(peopleService,'list').mockImplementation(async ()=> result);
+        data:[]}];
+      jest.spyOn(peopleService,'listAll').mockImplementation(async ()=> result);
       expect(await peopleCotroller.getCharacterFrequency()).toEqual([]);
     });
   })

@@ -1,4 +1,5 @@
-import { Controller, Get, HttpException, HttpStatus, Query, Request } from '@nestjs/common';
+import { CACHE_MANAGER, Controller, Get, HttpException, HttpStatus, Inject, Query, Request } from '@nestjs/common';
+import {Cache} from 'cache-manager';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { stringCharFrequency } from 'common/helpers/character-classificator.helper';
 import { PeopleListDTO } from 'common/validators/people-list.dto';
@@ -9,7 +10,7 @@ import { PeopleService } from './people.service';
 @Controller('api/people')
 @ApiTags('people')
 export class PeopleController {
-    constructor(private readonly peopleService : PeopleService){}
+    constructor(private readonly peopleService : PeopleService, @Inject(CACHE_MANAGER) private cacheManager :Cache){}
 
     /**
      * Get People List using Salesloft API
@@ -47,32 +48,25 @@ export class PeopleController {
     @ApiResponse({ status: 500, description: 'Unexpected API Error' })
     async getCharacterFrequency(): Promise<any> {
         try{
-            const per_page = 50; //Maximum value
-            let page = 1; //Initial value
-            let total_pages = 0; 
             let resultSet:any = {};
-            let splitOperations = []; //To perform Promise.all
-
+            let responses = [];
             let ControlledPromise = require('bluebird');
 
-            
-            
-            //Perform first checking
-            const response = await this.peopleService.list({ page, per_page });
-            total_pages = response.metadata.paging.total_pages;
-            page = response.metadata.paging.current_page;
-
-            splitOperations.length = total_pages - 1;
-            splitOperations.fill(0); //This is going to be used for 'concurrent' iterations
-
             //Get all possible values
-            let responses = await ControlledPromise.map(splitOperations,
-                (val, index) => this.peopleService.list({page:(index+2), per_page}),
-                {concurrency:20}
-            );
+            const cachedResponses = await this.cacheManager.get('people:list:all')
+            if(cachedResponses){
+                responses = cachedResponses;
+            }else{
+                //Store in cache 
+                responses = await this.peopleService.listAll();
+                await this.cacheManager.set('people:list:all',responses,{ttl:10000});
+            }
+            
+
+            
 
             //Split characters and store them in Map - concurrent O(nk)
-            let results = await ControlledPromise.map([response,...responses],
+            let results = await ControlledPromise.map(responses,
                 (response, index) => stringCharFrequency(
                     response.data,
                     (value:any)=>value.email_address,
