@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { CharacterFrequencyListComponent } from './pages/character-frequency-list/character-frequency-list.component';
 
-import { CharacterFrequencyComponent } from './character-frequency.component';
 
-const routes: Routes = [{ path: '', component: CharacterFrequencyComponent }];
+const routes: Routes = [{ path: '', component: CharacterFrequencyListComponent }];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],

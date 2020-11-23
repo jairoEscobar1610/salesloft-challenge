@@ -1,0 +1,11 @@
+<div class="container-fluid mt-5 h-75">
+    <div class="container text-center">
+        <h2>People List - Character Frequencies</h2>
+    </div>
+    <hr />
+    <h6 class="font-error text-center" id="character-frequency-error" *ngIf="errorMsg">{{errorMsg}}</h6>
+    <!--Table component-->
+    <app-character-frequency-table [elements]="elements"></app-character-frequency-table>
+
+
+</div>

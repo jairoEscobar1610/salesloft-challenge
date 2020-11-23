@@ -61,7 +61,6 @@ export class PeopleListComponent implements OnInit, OnDestroy, AfterViewInit {
         ),
       )
       .subscribe(res => {
-        console.log(res);
         //Error exists
         this.elements = res.data;
         this.totalCount = res.total_count;
