@@ -6,6 +6,8 @@ import { MatTableModule } from '@angular/material/table'
 import { PeopleRoutingModule } from './people-routing.module';
 import { PeopleTableComponent } from './components/people-table/people-table.component';
 import { PeopleListComponent } from './pages/people-list/people-list.component';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
 
 
 @NgModule({
@@ -13,6 +15,8 @@ import { PeopleListComponent } from './pages/people-list/people-list.component';
   imports: [
     CommonModule,
     MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
     PeopleRoutingModule
   ]
 })

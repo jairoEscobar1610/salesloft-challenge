@@ -29,8 +29,8 @@ export class PeopleService {
     let params = new HttpParams();
 
     params = (page ? params.append('page',`${page}`) : params);
-    params = (page ? params.append('per_page',`${per_page}`) : params);
-    
+    params = (per_page ? params.append('per_page',`${per_page}`) : params);
+    console.log(`query params:`,params);
     return this.http.get<People[]>(url, {params})
       .pipe(
         tap(_ => this.log('fetched people')),

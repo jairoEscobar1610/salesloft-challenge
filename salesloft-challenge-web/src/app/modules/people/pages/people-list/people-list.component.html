@@ -5,7 +5,8 @@
     <hr/>
     <h6 class="font-error text-center" *ngIf="peopleListErrorMsg">{{peopleListErrorMsg}}</h6>
     <!--Table component-->
-    <app-people-table [elements]="elements"></app-people-table>
+    <app-people-table [elements]="elements" [totalCount]="totalCount" [currentPage]="currentPage"
+        (updateList)="updateList($event)"></app-people-table>
     
   
   </div>

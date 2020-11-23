@@ -1,7 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { By } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { mockPeopleList } from 'src/app/core/mockups/people-list.mockup';
+import { People } from 'src/app/shared/models/people.model';
 
 import { PeopleTableComponent } from './people-table.component';
 
@@ -12,7 +15,7 @@ describe('PeopleTableComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [PeopleTableComponent],
-      imports: [MatTableModule]
+      imports: [MatTableModule, MatPaginatorModule, BrowserAnimationsModule]
     })
     .compileComponents();
   });
@@ -20,7 +23,7 @@ describe('PeopleTableComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(PeopleTableComponent);
     component = fixture.componentInstance;
-    component.dataSource = mockPeopleList;
+    component.dataSource = new MatTableDataSource<People>(mockPeopleList);
     fixture.detectChanges();
   });
 
@@ -28,8 +31,8 @@ describe('PeopleTableComponent', () => {
     expect(component).toBeTruthy();
   });
   it('should bind list of people with details', async() => {
-    expect(component.dataSource[0].id === 1).toBeTruthy();
-    expect(component.dataSource.length).toBe(10);
+    expect(component.dataSource.data[0].id === 1).toBeTruthy();
+    expect(component.dataSource.data.length).toBe(10);
   });
 
   it('should display all the people on the table', async () => {
