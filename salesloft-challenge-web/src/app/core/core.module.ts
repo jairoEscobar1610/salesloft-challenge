@@ -20,6 +20,6 @@ import { SharedModule } from '../shared/shared.module';
   exports:[
     HeaderComponent, FooterComponent, PageNotFoundComponent
   ],
-  providers:[ ]
+  providers:[{ provide: LoggerService, useClass: ConsoleLoggerService }]
 })
 export class CoreModule { }

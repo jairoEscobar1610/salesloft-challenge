@@ -8,6 +8,7 @@ import { CoreModule } from './core/core.module';
 import { HomeModule } from './modules/home/home.module';
 import { SharedModule } from './shared/shared.module';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
     SharedModule,
     HomeModule,
 
+    HttpClientModule,
     NgxSpinnerModule,
 
     BrowserModule,

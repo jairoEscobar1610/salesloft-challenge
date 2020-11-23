@@ -37,7 +37,6 @@ describe('HomePageComponent', () => {
 
     let fixture = TestBed.createComponent(HomePageComponent);
     fixture.detectChanges();
-      console.log("Right here");
     fixture.debugElement.query(By.css("button[id='people-link']")).nativeElement.click();
     fixture.whenStable().then(() => {
       expect(location.path()).toEqual('/people');

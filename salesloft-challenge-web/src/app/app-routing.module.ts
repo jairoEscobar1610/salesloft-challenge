@@ -4,8 +4,9 @@ import { PageNotFoundComponent } from './core/page-not-found/page-not-found.comp
 
 const routes: Routes = [
   { path: '', redirectTo:'/home', pathMatch:'full'},
-  { path: '**', component: PageNotFoundComponent },
-  { path: 'home', loadChildren: () => import('./modules/home/home.module').then(m => m.HomeModule) }];
+  { path: 'home', loadChildren: () => import('./modules/home/home.module').then(m => m.HomeModule) },
+  { path: 'people', loadChildren: () => import('./modules/people/people.module').then(m => m.PeopleModule) },
+  { path: '**', component: PageNotFoundComponent }];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
