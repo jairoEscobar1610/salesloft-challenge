@@ -3,7 +3,7 @@
       <h2>People List</h2>
     </div>
     <hr/>
-    <h6 class="font-error text-center" *ngIf="peopleListErrorMsg">{{peopleListErrorMsg}}</h6>
+    <h6 class="font-error text-center" id="people-list-error" *ngIf="peopleListErrorMsg">{{peopleListErrorMsg}}</h6>
     <!--Table component-->
     <app-people-table [elements]="elements" [totalCount]="totalCount" [currentPage]="currentPage"
         (updateList)="updateList($event)"></app-people-table>
