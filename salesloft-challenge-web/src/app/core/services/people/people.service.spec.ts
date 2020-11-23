@@ -73,7 +73,29 @@ describe('PeopleService', () => {
 
         httpMock.verify();
       }
-    )
-  );
+    ));
+
+    it('should return character frequency list',
+      inject(
+        [PeopleService, HttpTestingController],
+        (peopleService: PeopleService, backend: HttpTestingController) => {
+
+          peopleService.getCharacterFrequency().subscribe((data: any) => {
+            expect(data.length).toBeGreaterThan(0);
+          });
+
+          // Set up
+          const responseObject = [{
+            key:'a', frequency:5
+          }];
+          // End Setup
+
+          const requestWrapper = backend.expectOne(`${peopleService.apiUrl}/people/character-frequency`);
+          requestWrapper.flush(responseObject);
+          expect(requestWrapper.request.method).toEqual('GET');
+
+          httpMock.verify();
+        }
+      ));
   });
 });

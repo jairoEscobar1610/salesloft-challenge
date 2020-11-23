@@ -7,6 +7,7 @@ import { environment } from '../../../../environments/environment';
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { People } from 'src/app/shared/models/people.model';
+import { CharacterFrequency } from 'src/app/shared/models/character-frequecy.model';
 
 @Injectable({
   providedIn: 'root'
@@ -34,6 +35,19 @@ export class PeopleService {
       .pipe(
         tap(_ => this.log('fetched people')),
         catchError(this.handleError('getPeopleList', []))
+      );
+  }
+
+  /**
+   * @description Get character frequency from people list
+   */
+  getCharacterFrequency (): Observable<any> {
+    const url = `${this.apiUrl}/people/character-frequency`;
+
+    return this.http.get<CharacterFrequency[]>(url)
+      .pipe(
+        tap(_ => this.log('fetched frequency')),
+        catchError(this.handleError('getCharacterFrequency', []))
       );
   }
 
