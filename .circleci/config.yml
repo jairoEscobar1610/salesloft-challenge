@@ -13,11 +13,10 @@ jobs:
   build-and-test-client:
     working_directory: ~/Salesloft/salesloft-challenge-web
     docker:
-        - image: circleci/node:10-browsers
+      - image: circleci/node:10-browsers
     steps:
       # Checkout the code from the branch into the working_directory
-      - checkout:
-        path:  ~/Salesloft
+      - checkout
       - run:
           command: cd salesloft-challenge-web
       # Install project dependencies
