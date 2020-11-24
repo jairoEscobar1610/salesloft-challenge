@@ -10,7 +10,7 @@ describe('workspace-project App', () => {
 
   it('should display welcome message', async () => {
     await page.navigateTo();
-    expect(await page.getTitleText()).toBe('Welcome to the Salesloft Challenge App');
+    expect(await page.getTitleText()).toBe('Welcome to the SalesLoft Challenge App');
   });
 
   afterEach(async () => {
