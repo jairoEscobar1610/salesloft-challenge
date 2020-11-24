@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { By } from '@angular/platform-browser';
@@ -17,7 +17,7 @@ describe('PeopleTableComponent', () => {
       declarations: [PeopleTableComponent],
       imports: [MatTableModule, MatPaginatorModule, BrowserAnimationsModule]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {
@@ -30,38 +30,36 @@ describe('PeopleTableComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-  it('should bind list of people with details', async() => {
+  it('should bind list of people with details', async () => {
     expect(component.dataSource.data[0].id === 1).toBeTruthy();
     expect(component.dataSource.data.length).toBe(10);
   });
 
-  it('should display all the people on the table', async () => {
-    
+  it('should display all the people on the table', waitForAsync(() => {
+
     component = fixture.componentInstance;
     component.setDataSource(mockPeopleList);
     fixture.detectChanges();
     fixture.whenStable().then(() => {
       fixture.detectChanges();
-      const tableBodyElements = fixture.debugElement.query(By.css("table[id='people-table'] tbody")).children;
+      const tableBodyElements = fixture.debugElement.query(By.css('table[id="people-table"] tbody')).children;
       expect(tableBodyElements.length).toBe(10);
-      
-    });
-    
-  });
 
-  it('should display correct columns for people data', async () => {
-    
+    });
+  }));
+
+  it('should display correct columns for people data', waitForAsync(() => {
+
     fixture.detectChanges();
     fixture.whenStable().then(() => {
       fixture.detectChanges();
       const tableHeaders = fixture.debugElement
-        .query(By.css("table[id='people-table'] thead tr"))
-        .children.map(header=>
-            header.nativeElement.innerHTML.trim()
-          );
-      expect(tableHeaders).toEqual(['Email Address','Name','Job Title']);
-      
+        .query(By.css('table[id="people-table"] thead tr'))
+        .children.map(header =>
+          header.nativeElement.innerHTML.trim()
+        );
+      expect(tableHeaders).toEqual(['Email Address', 'Name', 'Job Title']);
+
     });
-    
-  });
+  }));
 });

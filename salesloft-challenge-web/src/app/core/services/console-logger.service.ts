@@ -10,15 +10,16 @@ const noop = (): any => undefined;
 @Injectable()
 export class ConsoleLoggerService implements Logger {
 
-  get info() {
+  get info(): any {
     if (isDebugMode) {
+      /* tslint:disable-next-line */
       return console.info.bind(console);
     } else {
       return noop;
     }
   }
 
-  get warn() {
+  get warn(): any {
     if (isDebugMode) {
       return console.warn.bind(console);
     } else {
@@ -26,16 +27,17 @@ export class ConsoleLoggerService implements Logger {
     }
   }
 
-  get error() {
+  get error(): any {
     if (isDebugMode) {
       return console.error.bind(console);
     } else {
       return noop;
     }
   }
-  
+
   invokeConsoleMethod(type: string, args?: any): void {
-    const logFn: Function = console.log || noop;
+    /* tslint:disable-next-line */
+    const logFn: (Function) = console.log || noop;
     logFn.apply(console, [args]);
   }
 }

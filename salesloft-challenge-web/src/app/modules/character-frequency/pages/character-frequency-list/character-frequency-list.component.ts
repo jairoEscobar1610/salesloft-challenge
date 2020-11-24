@@ -11,49 +11,52 @@ import { CharacterFrequency } from 'src/app/shared/models/character-frequecy.mod
 })
 export class CharacterFrequencyListComponent implements OnInit, OnDestroy, AfterViewInit {
 
-  
 
-  //DataTable data
+
+  // DataTable data
   elements: Array<CharacterFrequency> = new Array<CharacterFrequency>();
 
 
-  //Error label handling
-  public errorMsg: string = "";
+  // Error label handling
+  public errorMsg = '';
 
-  //Subscriptions
+  // Subscriptions
   public characterFrequencySubscription?: Subscription;
 
-  constructor(private spinner: NgxSpinnerService,
-    private peopleService: PeopleService) {
+  constructor(private spinner: NgxSpinnerService, private peopleService: PeopleService) {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.fetchFrequencies();
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
   }
 
-  ngOnDestroy() {
-    this.characterFrequencySubscription!.unsubscribe();
+  ngOnDestroy(): void {
+    if (this.characterFrequencySubscription) {
+      this.characterFrequencySubscription.unsubscribe();
+    }
+
   }
 
   /**
    * Get character frequency list
    */
   fetchFrequencies(): void {
-    this.errorMsg = "";
+    this.errorMsg = '';
     this.spinner.show();
 
-    //Format observable data before consumption
+    // Format observable data before consumption
     this.characterFrequencySubscription = this.peopleService.getCharacterFrequency()
       .subscribe(res => {
-        //Error exists
+
         this.elements = res;
 
       }, error => {
+        // Error exists
         console.log(error);
-        this.errorMsg = "Cannot connect to the API. Please try again later";
+        this.errorMsg = 'Cannot connect to the API. Please try again later';
       }, () => {
         this.spinner.hide();
       }

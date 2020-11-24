@@ -13,62 +13,67 @@ import { People } from 'src/app/shared/models/people.model';
 })
 export class PeopleListComponent implements OnInit, OnDestroy, AfterViewInit {
 
-  
 
-  //DataTable data
+
+  // DataTable data
   elements: Array<People> = new Array<People>();
   currentPage = 1;
   pages = 0;
-  totalCount=0;
+  totalCount = 0;
 
 
-  //Error label handling
-  public peopleListErrorMsg: string = "";
+  // Error label handling
+  public peopleListErrorMsg = '';
 
-  //Subscriptions
+  // Subscriptions
   public peopleListSubscription?: Subscription;
 
-  constructor(private cdRef: ChangeDetectorRef,
-    private spinner: NgxSpinnerService,
-    private peopleService: PeopleService) {
+  constructor(private spinner: NgxSpinnerService, private peopleService: PeopleService) {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.fetchList();
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
   }
 
-  ngOnDestroy() {
-    this.peopleListSubscription!.unsubscribe();
+  ngOnDestroy(): void {
+    if (this.peopleListSubscription) {
+      this.peopleListSubscription.unsubscribe();
+    }
   }
 
   /**
    * Get people list
    */
-  fetchList(page?:number, per_page?:number): void {
-    this.peopleListErrorMsg = "";
+  fetchList(page?: number, perPage?: number): void {
+    this.peopleListErrorMsg = '';
     this.spinner.show();
 
-    //Format observable data before consumption
-    this.peopleListSubscription = this.peopleService.getPeopleList(page,per_page)
+    // Format observable data before consumption
+    this.peopleListSubscription = this.peopleService.getPeopleList(page, perPage)
       .pipe(
         map(response => (
-          {data:response.data.map((data: any) => new People(data.id, data.display_name, data.email_address, data.title)), 
-          total_count: response.metadata.paging.total_count,
-          current_page: response.metadata.paging.current_page})
+          {
+            /* tslint:disable-next-line */
+            data: response.data.map((data: any) => new People(data.id, data.display_name, data.email_address, data.title)),
+            /* tslint:disable-next-line */
+            total_count: response.metadata.paging.total_count,
+            /* tslint:disable-next-line */
+            current_page: response.metadata.paging.current_page
+          })
         ),
       )
       .subscribe(res => {
-        //Error exists
         this.elements = res.data;
         this.totalCount = res.total_count;
         this.currentPage = res.current_page;
 
       }, error => {
+        // Error exists
         console.log(error);
-        this.peopleListErrorMsg = "Cannot connect to the Salesloft API. Please try again later";
+        this.peopleListErrorMsg = 'Cannot connect to the Salesloft API. Please try again later';
       }, () => {
         this.spinner.hide();
       }
@@ -78,7 +83,7 @@ export class PeopleListComponent implements OnInit, OnDestroy, AfterViewInit {
   /**
    * Update list based on pagination changes
    */
-  updateList(paginationOptions : IPagination): void {
+  updateList(paginationOptions: IPagination): void {
     this.fetchList(paginationOptions.page, paginationOptions.per_page);
   }
 

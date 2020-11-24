@@ -10,47 +10,49 @@ import { PeopleService } from 'src/app/core/services/people/people.service';
 })
 export class DuplicatesPageComponent implements OnInit, OnDestroy, AfterViewInit {
 
-  
 
-  //Error label handling
-  public errorMsg: string = "";
+
+  // Error label handling
+  public errorMsg = '';
 
   public groups: Array<Array<string>> = [];
 
-  //Subscriptions
+  // Subscriptions
   public duplicatesSubscription?: Subscription;
 
-  constructor(private spinner: NgxSpinnerService,
-    private peopleService: PeopleService) {
+  constructor(private spinner: NgxSpinnerService, private peopleService: PeopleService) {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.fetchDuplicates();
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
   }
 
-  ngOnDestroy() {
-    this.duplicatesSubscription!.unsubscribe();
+  ngOnDestroy(): void {
+    if (this.duplicatesSubscription) {
+      this.duplicatesSubscription.unsubscribe();
+    }
+
   }
 
   /**
    * Get possible duplicates from People API
    */
   fetchDuplicates(): void {
-    this.errorMsg = "";
+    this.errorMsg = '';
     this.spinner.show();
 
-    //Format observable data before consumption
+    // Format observable data before consumption
     this.duplicatesSubscription = this.peopleService.getPossibleDuplicates()
       .subscribe(res => {
-        //Error exists
         this.groups = res.groups;
 
       }, error => {
-        console.log("Error:",error);
-        this.errorMsg = "Cannot connect to the API. Please try again later";
+        // Error exists
+        console.log('Error:', error);
+        this.errorMsg = 'Cannot connect to the API. Please try again later';
       }, () => {
         this.spinner.hide();
       }

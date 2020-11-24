@@ -22,4 +22,8 @@ export class SalesloftConfigService {
     return this.configService.get<string>(`salesloft.apiUrl`);
   }
 
+  get duplicateThreshold(): number {
+    return Number(this.configService.get<number>(`salesloft.duplicateThreshold`));
+  }
+
 }

@@ -14,7 +14,8 @@ import { CharacterFrequency } from 'src/app/shared/models/character-frequecy.mod
 })
 export class PeopleService {
 
-   public apiUrl = environment.apiUrl;  // URL to web api
+  // URL to web api
+  public apiUrl = environment.apiUrl;
 
   constructor(
     private http: HttpClient,
@@ -22,16 +23,16 @@ export class PeopleService {
 
   /**
    * @description Get list of people
-   * @param page 
-   * @param per_page 
+   * @param page page number
+   * @param per_page elements per page
    */
-  getPeopleList (page?:number,per_page?:number): Observable<any> {
+  getPeopleList(page?: number, perPage?: number): Observable<any> {
     const url = `${this.apiUrl}/people/list`;
     let params = new HttpParams();
 
-    params = (page ? params.append('page',`${page}`) : params);
-    params = (per_page ? params.append('per_page',`${per_page}`) : params);
-    return this.http.get<People[]>(url, {params})
+    params = (page ? params.append('page', `${page}`) : params);
+    params = (perPage ? params.append('per_page', `${perPage}`) : params);
+    return this.http.get<People[]>(url, { params })
       .pipe(
         tap(_ => this.log('fetched people')),
         catchError(this.handleError('getPeopleList', []))
@@ -41,7 +42,7 @@ export class PeopleService {
   /**
    * @description Get character frequency from people list
    */
-  getCharacterFrequency (): Observable<any> {
+  getCharacterFrequency(): Observable<any> {
     const url = `${this.apiUrl}/people/character-frequency`;
 
     return this.http.get<CharacterFrequency[]>(url)
@@ -54,7 +55,7 @@ export class PeopleService {
   /**
    * @description Get possible duplicates from  People API
    */
-  getPossibleDuplicates (): Observable<any> {
+  getPossibleDuplicates(): Observable<any> {
     const url = `${this.apiUrl}/people/duplicates`;
 
     return this.http.get<any[]>(url)
@@ -70,7 +71,7 @@ export class PeopleService {
    * @param operation - name of the operation that failed
    * @param result - optional value to return as the observable result
    */
-  private handleError<T> (operation = 'operation', result?: T) {
+  private handleError<T>(operation = 'operation', result?: T): (error: any) => Observable<T> {
     return (error: any): Observable<T> => {
 
       // TODO: send the error to remote logging infrastructure
@@ -80,11 +81,11 @@ export class PeopleService {
     };
   }
 
-  /** Log error messages from api calls*/
-  private logError(message: string) {
+  // Log error messages from api calls
+  private logError(message: string): void {
     this.logger.error(`People Service (error): ${message}`);
   }
-  private log(message: string) {
+  private log(message: string): void {
     this.logger.info(`People Service (info): ${message}`);
   }
 

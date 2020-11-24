@@ -20,15 +20,15 @@ export class PeopleTableComponent implements OnInit, AfterViewInit, OnChanges {
   elements: Array<any> = new Array<any>();
 
   @Input()
-  totalCount: number = 0;
+  totalCount = 0;
 
   @Input()
-  currentPage: number = 0;
+  currentPage = 0;
 
   @Output()
   updateList = new EventEmitter<IPagination>();
 
-  displayedColumns: string[] = ['email_address', 'display_name', 'title'];
+  displayedColumns: string[] = ['emailAddress', 'displayName', 'title'];
   pageSizeOptions: number[] = [10, 20, 25, 50, 100];
   dataSource = new MatTableDataSource(this.elements);
   @ViewChild(MatPaginator) paginator?: MatPaginator;
@@ -41,20 +41,27 @@ export class PeopleTableComponent implements OnInit, AfterViewInit, OnChanges {
 
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
 
-    //Assign paginator/sort functions
-    this.dataSource.paginator = this.paginator!;
-    this.dataSource.sort = this.sort!;
+    // Assign paginator/sort functions
+    if (this.paginator) {
+      this.dataSource.paginator = this.paginator;
+    }
+    if (this.sort) {
+      this.dataSource.sort = this.sort;
+    }
 
 
-    this.paginator!.page.subscribe((pageEvent: PageEvent) => {
-      this.updateList.emit({ page: pageEvent.pageIndex + 1, per_page: pageEvent.pageSize });
-    });
+    if (this.paginator) {
+      this.paginator.page.subscribe((pageEvent: PageEvent) => {
+        this.updateList.emit({ page: pageEvent.pageIndex + 1, per_page: pageEvent.pageSize });
+      });
+    }
+
   }
 
   public ngOnChanges(): void {
-    //Update datatable data
+    // Update datatable data
     this.setDataSource(this.elements);
   }
 
@@ -64,11 +71,19 @@ export class PeopleTableComponent implements OnInit, AfterViewInit, OnChanges {
    */
   setDataSource(elements: any[]): void {
     this.dataSource.data = elements;
-    this.dataSource.paginator = this.paginator!;
-    this.dataSource.sort = this.sort!;
+    if (this.paginator) {
+      this.dataSource.paginator = this.paginator;
+    }
+    if (this.sort) {
+      this.dataSource.sort = this.sort;
+    }
+
     setTimeout(() => {
-      this.paginator!.length = this.totalCount;
-      this.paginator!.pageIndex = this.currentPage - 1;
+      if (this.paginator) {
+        this.paginator.length = this.totalCount;
+        this.paginator.pageIndex = this.currentPage - 1;
+      }
+
     });
   }
 

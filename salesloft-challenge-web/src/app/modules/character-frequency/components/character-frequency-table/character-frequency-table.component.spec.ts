@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { By } from '@angular/platform-browser';
 import { mockCharacterFrequency } from 'src/app/core/mockups/character-frequency.mockup';
@@ -33,32 +33,32 @@ describe('CharacterFrequencyTableComponent', () => {
     expect(component.dataSource.data.length).toBe(10);
   });
 
-  it('should display all the character frequencies on the table', async () => {
+  it('should display all the character frequencies on the table', waitForAsync(() => {
 
     component = fixture.componentInstance;
     component.setDataSource(mockCharacterFrequency);
     fixture.detectChanges();
     fixture.whenStable().then(() => {
       fixture.detectChanges();
-      const tableBodyElements = fixture.debugElement.query(By.css("table[id='character-frequency-table'] tbody")).children;
+      const tableBodyElements = fixture.debugElement.query(By.css('table[id="character-frequency-table"] tbody')).children;
       expect(tableBodyElements.length).toBe(10);
 
     });
 
-  });
+  }));
 
-  it('should display correct columns for character frequency data', async () => {
+  it('should display correct columns for character frequency data', waitForAsync(() => {
     fixture.detectChanges();
     fixture.whenStable().then(() => {
       fixture.detectChanges();
       const tableHeaders = fixture.debugElement
-        .query(By.css("table[id='character-frequency-table'] thead tr"))
+        .query(By.css('table[id="character-frequency-table"] thead tr'))
         .children.map(header =>
           header.nativeElement.innerHTML.trim()
         );
       expect(tableHeaders).toEqual(['Key', 'Frequency']);
 
     });
-  });
+  }));
 
 });

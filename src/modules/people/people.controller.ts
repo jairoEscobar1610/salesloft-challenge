@@ -8,11 +8,13 @@ import { Person } from './people.entity';
 import { PeopleService } from './people.service';
 import { jaroWrinkerTest, stringSimilarityArray } from 'common/helpers/string-similarity.helper';
 import { flatten } from 'common/helpers/array.helper';
+import { SalesloftConfigService } from 'config/vendors/salesloft';
 
 @Controller('api/people')
 @ApiTags('people')
 export class PeopleController {
-    constructor(private readonly peopleService : PeopleService, @Inject(CACHE_MANAGER) private cacheManager :Cache){}
+    constructor(private readonly peopleService : PeopleService, @Inject(CACHE_MANAGER) private cacheManager :Cache,
+        private salesloftConfigService: SalesloftConfigService){}
 
     /**
      * Get People List using Salesloft API
@@ -20,7 +22,7 @@ export class PeopleController {
      * @returns response<People[]>
      */
     @Get('list')
-    @ApiResponse({ status: 200, description: 'Successful Response' })
+    @ApiResponse({ status: 200, description: 'Successful Response: Array<SalesloftPeopleResponse>' })
     @ApiResponse({ status: 400, description: 'Bad Request' })
     @ApiResponse({ status: 422, description: 'Salesloft Parameter API Error' })
     @ApiResponse({ status: 500, description: 'Unexpected API Error' })
@@ -44,7 +46,7 @@ export class PeopleController {
      * @returns response<CharacterFrequency[]>
      */
     @Get('character-frequency')
-    @ApiResponse({ status: 200, description: 'Successful Response' })
+    @ApiResponse({ status: 200, description: 'Successful Response: {key: string, frequency:number}[]' })
     @ApiResponse({ status: 400, description: 'Bad Request' })
     @ApiResponse({ status: 422, description: 'Salesloft Parameter API Error' })
     @ApiResponse({ status: 500, description: 'Unexpected API Error' })
@@ -98,7 +100,7 @@ export class PeopleController {
      * @returns response<Groups[]>
      */
     @Get('duplicates')
-    @ApiResponse({ status: 200, description: 'Successful Response' })
+    @ApiResponse({ status: 200, description: 'Successful Response: {groups:[]}' })
     @ApiResponse({ status: 400, description: 'Bad Request' })
     @ApiResponse({ status: 422, description: 'Salesloft Parameter API Error' })
     @ApiResponse({ status: 500, description: 'Unexpected API Error' })
@@ -124,7 +126,8 @@ export class PeopleController {
             //Run the string similarity algorithm against the results
             let results = await stringSimilarityArray(flattenResponses,
                 (value: any, index) => value.email_address,
-                jaroWrinkerTest
+                jaroWrinkerTest,
+                (this.salesloftConfigService.duplicateThreshold || 0.95)
             );
             
             return results;

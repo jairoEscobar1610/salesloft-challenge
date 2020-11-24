@@ -23,14 +23,17 @@ export class CharacterFrequencyTableComponent implements OnInit, AfterViewInit, 
 
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
 
-    //Assign sort function
-    this.dataSource.sort = this.sort!;
+    // Assign sort function
+    if (this.sort) {
+      this.dataSource.sort = this.sort;
+    }
+
   }
 
   public ngOnChanges(): void {
-    //Update datatable data on API call
+    // Update datatable data on API call
     this.setDataSource(this.elements);
   }
 
@@ -40,7 +43,9 @@ export class CharacterFrequencyTableComponent implements OnInit, AfterViewInit, 
    */
   setDataSource(elements: any[]): void {
     this.dataSource.data = elements;
-    this.dataSource.sort = this.sort!;
+    if (this.sort) {
+      this.dataSource.sort = this.sort;
+    }
   }
 
 }
