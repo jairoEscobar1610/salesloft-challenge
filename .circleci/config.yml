@@ -17,12 +17,10 @@ jobs:
     steps:
       # Checkout the code from the branch into the working_directory
       - checkout
-      - run:
-          command: cd salesloft-challenge-web
       # Install project dependencies
       - run:
           name: Install local dependencies
-          command: npm install
+          command: cd salesloft-challenge-web && npm install
       # Cache local dependencies if they don't exist
       - save_cache:
           key: v1-dependencies-{{ checksum "package-lock.json" }}
@@ -31,15 +29,15 @@ jobs:
       # Lint the source code
       - run:
           name: Linting
-          command: npm run lint
+          command: cd salesloft-challenge-web && npm run lint
       # Test the source code
       - run:
           name: Testing
-          command: npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
+          command: cd salesloft-challenge-web && npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
       # End to End test
       - run:
           name: End to End Test
-          command: npm run e2e -- --protractor-config=e2e/protractor-ci.conf.js
+          command: cd salesloft-challenge-web && npm run e2e -- --protractor-config=e2e/protractor-ci.conf.js
 workflows:
   build-and-test:
     jobs:
