@@ -31,13 +31,13 @@ describe('PeopleController', () => {
     it('should return an array of people with no parameters', async () => {
       const result = [new People()];
       jest.spyOn(peopleService,'list').mockImplementation(async ()=> result);
-      expect(await peopleCotroller.getPeopleList({})).toBe(result);
+      expect(await peopleCotroller.getPeopleList({})).toEqual(result);
     });
 
     it('should return an array of people, supporting page, page_per, sort_by and sort_direction parameters', async () => {
       const result = [new People()];
       jest.spyOn(peopleService,'list').mockImplementation(async ()=> result);
-      expect(await peopleCotroller.getPeopleList({page:1, per_page:25, sort_by:'updated_at',sort_direction:'ASC'})).toBe(result);
+      expect(await peopleCotroller.getPeopleList({page:1, per_page:25, sort_by:'updated_at',sort_direction:'ASC'})).toEqual(result);
     });
 
     it('should return an exception when using invalid parameters: sort_by', async (done) => {
