@@ -34,11 +34,11 @@ describe('PeopleListComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should bind list of people with details', async() => {
+  it('should bind list of people with details', async () => {
     expect(component.elements[0].id).toBeTruthy();
   });
 
-  it('should bind total count of people', async() => {
+  it('should bind total count of people', async () => {
     expect(component.totalCount).toBe(100);
   });
 
@@ -46,14 +46,14 @@ describe('PeopleListComponent', () => {
     expect(component.currentPage).toBe(1);
   });
 
-  it('should display the error message', async () => {
+  it('should display the error message', waitForAsync(() => {
     component = fixture.componentInstance;
-    component.peopleListErrorMsg = "Sample error";
+    component.peopleListErrorMsg = 'Sample error';
     fixture.detectChanges();
     fixture.whenStable().then(() => {
-      const errorContainer = fixture.debugElement.query(By.css("#people-list-error")).nativeElement;
-      expect(errorContainer.innerHTML).toBe("Sample error");
-      
+      const errorContainer = fixture.debugElement.query(By.css('#people-list-error')).nativeElement;
+      expect(errorContainer.innerHTML).toBe('Sample error');
+
     });
-  });
+  }));
 });

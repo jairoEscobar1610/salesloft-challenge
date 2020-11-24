@@ -1,6 +1,6 @@
 import { HttpClientModule } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { mockCharacterFrequency } from 'src/app/core/mockups/character-frequency.mockup';
 import { PeopleService } from 'src/app/core/services/people/people.service';
@@ -11,7 +11,7 @@ describe('CharacterFrequencyListComponent', () => {
   let component: CharacterFrequencyListComponent;
   let fixture: ComponentFixture<CharacterFrequencyListComponent>;
 
- beforeEach(async () => {
+  beforeEach(async () => {
     TestBed.configureTestingModule({
       declarations: [CharacterFrequencyListComponent],
       imports: [HttpClientModule, HttpClientTestingModule],
@@ -35,15 +35,15 @@ describe('CharacterFrequencyListComponent', () => {
   });
 
 
-  it('should display the error message', async() => {
+  it('should display the error message', waitForAsync(() => {
     component = fixture.componentInstance;
-    component.errorMsg = "Sample error"
+    component.errorMsg = 'Sample error';
     fixture.detectChanges();
     fixture.whenStable().then(() => {
       fixture.detectChanges();
-      const errorContainer = fixture.debugElement.query(By.css("#character-frequency-error")).nativeElement;
-      expect(errorContainer.innerHTML).toBe("Sample error");
-      
+      const errorContainer = fixture.debugElement.query(By.css('#character-frequency-error')).nativeElement;
+      expect(errorContainer.innerHTML).toBe('Sample error');
+
     });
-  });
+  }));
 });

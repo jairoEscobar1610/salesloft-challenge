@@ -18,9 +18,9 @@ export class HeaderComponent implements OnInit {
    * @description Scroll slowly upwards
    * @param event scroll event
    */
-  onActivate(event : Event) {
-    let scrollToTop = window.setInterval(() => {
-      let pos = window.pageYOffset;
+  onActivate(event: Event): void {
+    const scrollToTop = window.setInterval(() => {
+      const pos = window.pageYOffset;
       if (pos > 0) {
         window.scrollTo(0, pos - 20);
       } else {

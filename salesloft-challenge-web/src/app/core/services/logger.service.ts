@@ -17,6 +17,6 @@ export class LoggerService implements Logger {
   info: any;
   warn: any;
   error: any;
-  
-  invokeConsoleMethod(type: string, args?: any): void {}  
+
+  invokeConsoleMethod(type: string, args?: any): void { }
 }

@@ -17,9 +17,9 @@ import { SharedModule } from '../shared/shared.module';
     RouterModule,
     SharedModule
   ],
-  exports:[
+  exports: [
     HeaderComponent, FooterComponent, PageNotFoundComponent
   ],
-  providers:[{ provide: LoggerService, useClass: ConsoleLoggerService }]
+  providers: [{ provide: LoggerService, useClass: ConsoleLoggerService }]
 })
 export class CoreModule { }

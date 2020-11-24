@@ -10,6 +10,6 @@ import { NgxSpinnerModule } from 'ngx-spinner';
     CommonModule,
     NgxSpinnerModule
   ],
-  exports:[LoaderComponent]
+  exports: [LoaderComponent]
 })
 export class SharedModule { }

@@ -39,9 +39,9 @@ describe('PeopleService', () => {
           // Set up
           const responseObject = [{
             id: 1,
-            name: "Test",
-            email: "test@example.com",
-            job_role: "tester"
+            name: 'Test',
+            email: 'test@example.com',
+            job_role: 'tester'
           }];
           // End Setup
 
@@ -60,12 +60,12 @@ describe('PeopleService', () => {
         (peopleService: PeopleService, backend: HttpTestingController) => {
 
           peopleService.getPeopleList(0).subscribe((data: any) => {
-            expect(data).toEqual({ error: "Invalid params" });
+            expect(data).toEqual({ error: 'Invalid params' });
           });
 
           // Set up
           const responseObject = {
-            error: "Invalid params"
+            error: 'Invalid params'
           };
           const requestWrapper = backend.expectOne(`${peopleService.apiUrl}/people/list`);
           requestWrapper.flush(responseObject);
@@ -98,7 +98,7 @@ describe('PeopleService', () => {
         }
       ));
 
-      it('should return possible duplicate groups',
+    it('should return possible duplicate groups',
       inject(
         [PeopleService, HttpTestingController],
         (peopleService: PeopleService, backend: HttpTestingController) => {
@@ -108,7 +108,7 @@ describe('PeopleService', () => {
           });
 
           // Set up
-          const responseObject = {groups: []};
+          const responseObject = { groups: [] };
           // End Setup
 
           const requestWrapper = backend.expectOne(`${peopleService.apiUrl}/people/duplicates`);
