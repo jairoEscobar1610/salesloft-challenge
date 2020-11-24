@@ -4,7 +4,7 @@ import { SalesloftProviderModule } from 'providers/vendors/salesloft/salesloft.m
 import { PeopleController } from './people.controller';
 import { PeopleService } from './people.service';
 import { People } from "./../../common/models/people.model";
-import { CacheModule, HttpException } from '@nestjs/common';
+import { CacheModule, HttpException, UnprocessableEntityException } from '@nestjs/common';
 import { of } from 'rxjs';
 
 describe('PeopleController', () => {
@@ -52,6 +52,15 @@ describe('PeopleController', () => {
       peopleCotroller.getPeopleList({sort_by:'email_address'}).catch(error=>{expect(error.response).toBe('Salesloft API Error'); done();});
       
     });
+
+    it('should return an exception when catching an unexpected response', async (done) => {
+      const response =  new Error('Internal Error');
+
+      jest.spyOn(peopleService,'list').mockImplementation(() => new Promise((resolve,reject)=>reject(response)));
+
+      peopleCotroller.getPeopleList({sort_by:'email_address'}).catch(error=>{expect(error.response).toBe('Unexpected API Error'); done();});
+      
+    });
     
   });
 
@@ -87,6 +96,15 @@ describe('PeopleController', () => {
       jest.spyOn(peopleService,'listAll').mockImplementation(() => new Promise((resolve,reject)=>reject(response)));
 
       peopleCotroller.getCharacterFrequency().catch(error=>{expect(error.response).toBe('Salesloft API Error'); done();});
+    });
+
+    it('should return an exception when catching an unexpected response', async (done) => {
+      const response =  new Error('Internal Error');
+
+      jest.spyOn(peopleService,'listAll').mockImplementation(() => new Promise((resolve,reject)=>reject(response)));
+
+      peopleCotroller.getCharacterFrequency().catch(error=>{expect(error.response).toBe('Unexpected API Error'); done();});
+      
     });
   });
 
@@ -129,6 +147,15 @@ describe('PeopleController', () => {
       jest.spyOn(peopleService,'listAll').mockImplementation(() => new Promise((resolve,reject)=>reject(response)));
 
       peopleCotroller.getDuplicates().catch(error=>{expect(error.response).toBe('Salesloft API Error'); done();});
+    });
+
+    it('should return an exception when catching an unexpected response', async (done) => {
+      const response =  new Error('Internal Error');
+
+      jest.spyOn(peopleService,'listAll').mockImplementation(() => new Promise((resolve,reject)=>reject(response)));
+
+      peopleCotroller.getCharacterFrequency().catch(error=>{expect(error.response).toBe('Unexpected API Error'); done();});
+      
     });
   });
 
