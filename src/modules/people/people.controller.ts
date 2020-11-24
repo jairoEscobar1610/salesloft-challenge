@@ -22,7 +22,7 @@ export class PeopleController {
      * @returns response<People[]>
      */
     @Get('list')
-    @ApiResponse({ status: 200, description: 'Successful Response' })
+    @ApiResponse({ status: 200, description: 'Successful Response: Array<SalesloftPeopleResponse>' })
     @ApiResponse({ status: 400, description: 'Bad Request' })
     @ApiResponse({ status: 422, description: 'Salesloft Parameter API Error' })
     @ApiResponse({ status: 500, description: 'Unexpected API Error' })
@@ -46,7 +46,7 @@ export class PeopleController {
      * @returns response<CharacterFrequency[]>
      */
     @Get('character-frequency')
-    @ApiResponse({ status: 200, description: 'Successful Response' })
+    @ApiResponse({ status: 200, description: 'Successful Response: {key: string, frequency:number}[]' })
     @ApiResponse({ status: 400, description: 'Bad Request' })
     @ApiResponse({ status: 422, description: 'Salesloft Parameter API Error' })
     @ApiResponse({ status: 500, description: 'Unexpected API Error' })
@@ -100,7 +100,7 @@ export class PeopleController {
      * @returns response<Groups[]>
      */
     @Get('duplicates')
-    @ApiResponse({ status: 200, description: 'Successful Response' })
+    @ApiResponse({ status: 200, description: 'Successful Response: {groups:[]}' })
     @ApiResponse({ status: 400, description: 'Bad Request' })
     @ApiResponse({ status: 422, description: 'Salesloft Parameter API Error' })
     @ApiResponse({ status: 500, description: 'Unexpected API Error' })

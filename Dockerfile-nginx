@@ -2,9 +2,13 @@ FROM nginx:alpine
 
 COPY ./docker/entrypoint-nginx.sh /
 
+RUN apk update && apk add dos2unix
+
 RUN set -ex && \
 	apk add --no-cache bash && \
-	chmod +x /entrypoint-nginx.sh
+	dos2unix /usr/local/bin/entrypoint-nginx.sh && \
+	chmod +x /usr/local/bin/entrypoint-nginx.sh && \
+	ln -s /usr/local/bin/entrypoint-nginx.sh /
 
 COPY ./docker/vhost.template /etc/nginx/conf.d/vhost.template
 
