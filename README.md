@@ -1,6 +1,7 @@
 <h1>Salesloft Interview Challenge - NestJS and Angular
-  <a
-    href="http://nestjs.com/"
+  
+</h1>
+<a  href="http://nestjs.com/"
     target="blank"
   >
     <img
@@ -19,7 +20,6 @@
       alt="Angular Logo"
     />
   </a>
-</h1>
 
 ## Description
 
@@ -51,9 +51,6 @@ For IDE autocompletion to work, run `yarn` on the host machine.
 # unit tests
 $ docker exec -it nest yarn test
 
-# e2e tests
-$ docker exec -it nest yarn test:e2e
-
 # test coverage
 $ docker exec -it nest yarn test:cov
 ```
@@ -63,20 +60,13 @@ $ docker exec -it nest yarn test:cov
 RESTful APIs are integrated with Swagger.
 To see all available endpoints visit http://localhost/api/docs
 
-### TypeORM integrated
-
-[TypeORM](http://typeorm.io/) This project uses `mariadb` for anonymous fingerprint registration.
-This database is configured and deployed through docker-compose.
-
-### Authentication - JWT
-
-This application uses JWT authentication based on fingerprint - token exchange. NestJS endpoints
-are protected through this method.
 
 ## Client Side: Angular
 
 
 ### Setup and installation
+
+Move to the `salesloft-challenge-web` directory to start the setup.
 
 Install the `npm` packages described in the `package.json` and verify that it works:
 
@@ -94,10 +84,8 @@ Shut it down manually with `Ctrl-C`.
 These are the most useful commands defined in `package.json`:
 
 * `npm start` - runs the TypeScript compiler, asset copier, and a server at the same time, all three in "watch mode".
-* `npm run build` - runs the TypeScript compiler and asset copier once.
-* `npm run build:watch` - runs the TypeScript compiler and asset copier in "watch mode"; when changes occur to source files, they will be recompiled or copied into `dist/`.
-* `npm run lint` - runs `tslint` on the project files.
-* `npm run serve` - runs `lite-server`.
+* `npm build` - runs the TypeScript compiler and asset copier once.
+* `npm lint` - runs `tslint` on the project files.
 
 These are the test-related scripts:
 

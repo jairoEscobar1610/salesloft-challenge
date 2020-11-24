@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
 import { SalesloftProviderModule } from 'providers/vendors/salesloft/salesloft.module';
+import { SalesloftConfigModule } from 'config/vendors/salesloft';
 import { PeopleController } from './people.controller';
 import { PeopleService } from './people.service';
 import { People } from "./../../common/models/people.model";
@@ -13,7 +14,7 @@ describe('PeopleController', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports:[SalesloftProviderModule, CacheModule.register()],
+      imports:[SalesloftProviderModule, SalesloftConfigModule, CacheModule.register()],
       controllers: [PeopleController],
       providers: [PeopleService]
     }).compile();
