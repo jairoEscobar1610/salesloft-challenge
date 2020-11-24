@@ -11,7 +11,7 @@ jobs:
       - run:
           command: npm run test
   build-and-test-client:
-    working_directory: ~/Salesloft/salesloft-challenge-web
+    working_directory: ~/Salesloft
     docker:
       - image: circleci/node:10-browsers
     steps:
