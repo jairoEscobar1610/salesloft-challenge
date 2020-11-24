@@ -32,11 +32,7 @@ export class PeopleService {
 
     params = (page ? params.append('page', `${page}`) : params);
     params = (perPage ? params.append('per_page', `${perPage}`) : params);
-    return this.http.get<People[]>(url, { params })
-      .pipe(
-        tap(_ => this.log('fetched people')),
-        catchError(this.handleError('getPeopleList', []))
-      );
+    return this.http.get<People[]>(url, { params });
   }
 
   /**
@@ -45,11 +41,7 @@ export class PeopleService {
   getCharacterFrequency(): Observable<any> {
     const url = `${this.apiUrl}/people/character-frequency`;
 
-    return this.http.get<CharacterFrequency[]>(url)
-      .pipe(
-        tap(_ => this.log('fetched frequency')),
-        catchError(this.handleError('getCharacterFrequency', []))
-      );
+    return this.http.get<CharacterFrequency[]>(url);
   }
 
   /**
@@ -58,11 +50,7 @@ export class PeopleService {
   getPossibleDuplicates(): Observable<any> {
     const url = `${this.apiUrl}/people/duplicates`;
 
-    return this.http.get<any[]>(url)
-      .pipe(
-        tap(_ => this.log('fetched duplicates')),
-        catchError(this.handleError('getPossibleDuplicates', []))
-      );
+    return this.http.get<any[]>(url);
   }
 
   /**

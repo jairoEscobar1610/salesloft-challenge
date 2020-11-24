@@ -53,6 +53,7 @@ export class DuplicatesPageComponent implements OnInit, OnDestroy, AfterViewInit
         // Error exists
         console.log('Error:', error);
         this.errorMsg = 'Cannot connect to the API. Please try again later';
+        this.spinner.hide();
       }, () => {
         this.spinner.hide();
       }

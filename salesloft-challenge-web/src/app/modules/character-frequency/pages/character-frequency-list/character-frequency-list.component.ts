@@ -57,6 +57,7 @@ export class CharacterFrequencyListComponent implements OnInit, OnDestroy, After
         // Error exists
         console.log(error);
         this.errorMsg = 'Cannot connect to the API. Please try again later';
+        this.spinner.hide();
       }, () => {
         this.spinner.hide();
       }

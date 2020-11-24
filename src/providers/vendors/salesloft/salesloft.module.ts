@@ -5,14 +5,14 @@ import { SalesloftConfigModule, SalesloftConfigService } from 'config/vendors/sa
 @Module({
   imports: [SalesloftConfigModule,
     HttpModule.registerAsync({
-    imports:[SalesloftConfigModule],
-    useFactory: async (salesloftConfigService: SalesloftConfigService) => ({
-      headers: {'authorization':`Bearer ${salesloftConfigService.apiKey}`}
-    }),
-    inject:[SalesloftConfigService]
-    
-  })],
+      imports: [SalesloftConfigModule],
+      useFactory: async (salesloftConfigService: SalesloftConfigService) => ({
+        headers: { 'authorization': `Bearer ${salesloftConfigService.apiKey}` }
+      }),
+      inject: [SalesloftConfigService]
+
+    })],
   providers: [SalesloftPeopleService],
   exports: [SalesloftPeopleService]
 })
-export class SalesloftProviderModule {}
+export class SalesloftProviderModule { }

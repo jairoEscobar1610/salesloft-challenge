@@ -3,12 +3,11 @@ import { ConfigService } from '@nestjs/config';
 
 /**
  * Service that manages third-party Salesloft config-based operations
- * 
  * @class
  */
 @Injectable()
 export class SalesloftConfigService {
-  constructor(private configService: ConfigService) {}
+  constructor(private configService: ConfigService) { }
 
   get(key: string): string {
     return this.configService.get<string>(`salesloft.${key}`);

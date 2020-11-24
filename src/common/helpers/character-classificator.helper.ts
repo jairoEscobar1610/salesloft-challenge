@@ -11,11 +11,11 @@ export function stringCharFrequency(contentArray: any[], mapFunction: (value: an
         try {
             resultSet.frequency = (resultSet.frequency || {});
             contentArray
-                //Clear the data
+                // Clear the data
                 .map(mapFunction)
                 .forEach((text) => {
                     for (let i = 0; i < text.length; i++) {
-                        let char = text.charAt(i);
+                        const char = text.charAt(i);
                         resultSet.frequency[char] = (resultSet.frequency[char] ? resultSet.frequency[char] + 1 : 1);
                     }
                 });
