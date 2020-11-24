@@ -7,6 +7,7 @@ const routes: Routes = [
   { path: 'home', loadChildren: () => import('./modules/home/home.module').then(m => m.HomeModule) },
   { path: 'people', loadChildren: () => import('./modules/people/people.module').then(m => m.PeopleModule) },
   { path: 'character-frequency', loadChildren: () => import('./modules/character-frequency/character-frequency.module').then(m => m.CharacterFrequencyModule) },
+  { path: 'duplicates', loadChildren: () => import('./modules/duplicates/duplicates.module').then(m => m.DuplicatesModule) },
   { path: '**', component: PageNotFoundComponent }];
 
 @NgModule({

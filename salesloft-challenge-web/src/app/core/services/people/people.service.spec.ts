@@ -38,10 +38,10 @@ describe('PeopleService', () => {
 
           // Set up
           const responseObject = [{
-            id:1,
-            name:"Test",
-            email:"test@example.com",
-            job_role:"tester"
+            id: 1,
+            name: "Test",
+            email: "test@example.com",
+            job_role: "tester"
           }];
           // End Setup
 
@@ -55,25 +55,25 @@ describe('PeopleService', () => {
     );
 
     it('should not return any people (invalid params)',
-    inject(
-      [PeopleService, HttpTestingController],
-      (peopleService: PeopleService, backend: HttpTestingController) => {
+      inject(
+        [PeopleService, HttpTestingController],
+        (peopleService: PeopleService, backend: HttpTestingController) => {
 
-        peopleService.getPeopleList(0).subscribe((data: any) => {
-          expect(data).toEqual({error:"Invalid params"});
-        });
+          peopleService.getPeopleList(0).subscribe((data: any) => {
+            expect(data).toEqual({ error: "Invalid params" });
+          });
 
-        // Set up
-        const responseObject = {
-          error:"Invalid params"
-        };
-        const requestWrapper = backend.expectOne(`${peopleService.apiUrl}/people/list`);
-        requestWrapper.flush(responseObject);
-        expect(requestWrapper.request.method).toEqual('GET');
+          // Set up
+          const responseObject = {
+            error: "Invalid params"
+          };
+          const requestWrapper = backend.expectOne(`${peopleService.apiUrl}/people/list`);
+          requestWrapper.flush(responseObject);
+          expect(requestWrapper.request.method).toEqual('GET');
 
-        httpMock.verify();
-      }
-    ));
+          httpMock.verify();
+        }
+      ));
 
     it('should return character frequency list',
       inject(
@@ -86,11 +86,32 @@ describe('PeopleService', () => {
 
           // Set up
           const responseObject = [{
-            key:'a', frequency:5
+            key: 'a', frequency: 5
           }];
           // End Setup
 
           const requestWrapper = backend.expectOne(`${peopleService.apiUrl}/people/character-frequency`);
+          requestWrapper.flush(responseObject);
+          expect(requestWrapper.request.method).toEqual('GET');
+
+          httpMock.verify();
+        }
+      ));
+
+      it('should return possible duplicate groups',
+      inject(
+        [PeopleService, HttpTestingController],
+        (peopleService: PeopleService, backend: HttpTestingController) => {
+
+          peopleService.getPossibleDuplicates().subscribe((data: any) => {
+            expect(data.groups).toEqual([]);
+          });
+
+          // Set up
+          const responseObject = {groups: []};
+          // End Setup
+
+          const requestWrapper = backend.expectOne(`${peopleService.apiUrl}/people/duplicates`);
           requestWrapper.flush(responseObject);
           expect(requestWrapper.request.method).toEqual('GET');
 

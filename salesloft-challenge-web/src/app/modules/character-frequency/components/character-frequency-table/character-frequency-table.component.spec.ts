@@ -35,7 +35,6 @@ describe('CharacterFrequencyTableComponent', () => {
 
   it('should display all the character frequencies on the table', async () => {
 
-    let fixture = TestBed.createComponent(CharacterFrequencyTableComponent);
     component = fixture.componentInstance;
     component.setDataSource(mockCharacterFrequency);
     fixture.detectChanges();
@@ -49,8 +48,6 @@ describe('CharacterFrequencyTableComponent', () => {
   });
 
   it('should display correct columns for character frequency data', async () => {
-
-    let fixture = TestBed.createComponent(CharacterFrequencyTableComponent);
     fixture.detectChanges();
     fixture.whenStable().then(() => {
       fixture.detectChanges();

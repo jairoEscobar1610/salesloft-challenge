@@ -1,9 +1,10 @@
 import { HttpClientModule } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { mockPeopleList } from 'src/app/core/mockups/people-list.mockup';
 import { PeopleService } from 'src/app/core/services/people/people.service';
+import { PeopleTableComponent } from '../../components/people-table/people-table.component';
 
 import { PeopleListComponent } from './people-list.component';
 
@@ -41,17 +42,15 @@ describe('PeopleListComponent', () => {
     expect(component.totalCount).toBe(100);
   });
 
-  it('should bind current page', async() => {
+  it('should bind current page', () => {
     expect(component.currentPage).toBe(1);
   });
 
-  it('should display the error message', async() => {
-    fixture = TestBed.createComponent(PeopleListComponent);
+  it('should display the error message', async () => {
     component = fixture.componentInstance;
-    component.peopleListErrorMsg = "Sample error"
+    component.peopleListErrorMsg = "Sample error";
     fixture.detectChanges();
     fixture.whenStable().then(() => {
-      fixture.detectChanges();
       const errorContainer = fixture.debugElement.query(By.css("#people-list-error")).nativeElement;
       expect(errorContainer.innerHTML).toBe("Sample error");
       
