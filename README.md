@@ -32,7 +32,6 @@ Challenge taken with ❤️ by Jairo Escobar.
 ### Outside Docker containers
 
 - Create .env file `cp .env.example .env` and replace existing env variables
-  (mysql/mariadb connection params)
 - Install dependencies `yarn`
 - Start the app `yarn start` or `npm start` (app will be exposed through the port 3000)
 - Use `yarn start:dev` or `yarn start:debug` to watch for changes
