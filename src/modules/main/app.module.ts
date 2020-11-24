@@ -8,8 +8,8 @@ import { PeopleModule } from 'modules/people';
 
 @Module({
   imports: [
-    AppConfigModule, 
-    MysqlConfigModule, 
+    AppConfigModule,
+    MysqlConfigModule,
     SalesloftConfigModule,
     PeopleModule,
     CacheModule.register()
@@ -17,4 +17,4 @@ import { PeopleModule } from 'modules/people';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }

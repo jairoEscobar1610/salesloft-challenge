@@ -3,7 +3,6 @@ import { ConfigService } from '@nestjs/config';
 
 /**
  * Service that manages app config-based operations
- * 
  * @class
  */
 @Injectable()

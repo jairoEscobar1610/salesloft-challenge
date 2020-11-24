@@ -1,4 +1,4 @@
-import { AxiosResponse } from "axios";
+import { AxiosResponse } from 'axios';
 
 export const axiosResponses: { 200: AxiosResponse, 422: AxiosResponse } = {
     200: {

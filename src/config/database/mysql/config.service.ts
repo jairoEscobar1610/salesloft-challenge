@@ -3,7 +3,6 @@ import { ConfigService } from '@nestjs/config';
 
 /**
  * Service that manages app mysql-based operations
- * 
  * @class
  */
 @Injectable()
