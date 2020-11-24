@@ -59,8 +59,9 @@ describe('PeopleController', () => {
     it('should return the correct frequency for a given response', async () => {
       //Prepare test payload
       const result = [{
-        metadata: { paging: {total_pages:1, current_page:1}},
-        data:[{email_address:'a@e'},{email_address:'a@y'},{email_address:'a@a.a.a.e.a'}]}];
+        metadata: { paging: { total_pages: 1, current_page: 1 } },
+        data: [{ email_address: 'a@e' }, { email_address: 'a@y' }, { email_address: 'a@a.a.a.e.a' }]
+      }];
       jest.spyOn(peopleService,'listAll').mockImplementation(async ()=> result);
       expect(await peopleCotroller.getCharacterFrequency()).toEqual([
         {'key':'a', 'frequency':7},{'key':'.', 'frequency':4},
@@ -71,9 +72,10 @@ describe('PeopleController', () => {
     it('should return an empty frequency array when people API responds with empty data', async () => {
       //Prepare test payload
       const result = [{
-        metadata: { paging: {total_pages:1, current_page:1}},
-        data:[]}];
-      
+        metadata: { paging: { total_pages: 1, current_page: 1 } },
+        data: []
+      }];
+
       jest.spyOn(peopleService,'listAll').mockImplementation(async ()=> result);
       expect(await peopleCotroller.getCharacterFrequency()).toEqual([]);
     });

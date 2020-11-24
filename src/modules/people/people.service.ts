@@ -32,6 +32,11 @@ export class PeopleService {
 
     //Perform first checking
     const response = await this.peopleAPIService.list({ page, per_page:chunkSize }).toPromise();
+
+    //If response is empty
+    if(!response.data || response.data.length === 0){
+      return [];
+    }
     total_pages = response.data.metadata.paging.total_pages;
     page = response.data.metadata.paging.current_page;
 
