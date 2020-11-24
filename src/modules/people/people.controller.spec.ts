@@ -73,10 +73,62 @@ describe('PeopleController', () => {
       const result = [{
         metadata: { paging: {total_pages:1, current_page:1}},
         data:[]}];
+      
       jest.spyOn(peopleService,'listAll').mockImplementation(async ()=> result);
       expect(await peopleCotroller.getCharacterFrequency()).toEqual([]);
     });
-  })
+
+    it('should handle the Salesloft API exceptions', async (done) => {
+      //Prepare test payload (Exception)
+      const response = new HttpException('Invalid Parameter',422);
+
+      jest.spyOn(peopleService,'listAll').mockImplementation(() => new Promise((resolve,reject)=>reject(response)));
+
+      peopleCotroller.getCharacterFrequency().catch(error=>{expect(error.response).toBe('Salesloft API Error'); done();});
+    });
+  });
+
+  describe('getDuplicates', () => {
+    it('should return the correct duplicate group for a given response', async () => {
+      //Prepare test payload
+      const result = [{
+        metadata: { paging: {total_pages:1, current_page:1}},
+        data:[{email_address:'testexample@example.com'},
+        {email_address:'testexampl@example.com'},
+        {email_address:'testexampel@example.com'},
+        {email_address:'another.example.not.duplicate@example.com'}]}];
+      jest.spyOn(peopleService,'listAll').mockImplementation(async ()=> result);
+
+      expect(await peopleCotroller.getDuplicates()).toEqual({
+        groups:[
+          ['testexample@example.com','testexampl@example.com','testexampel@example.com']
+      ]});
+    });
+
+    it('should return an empty group array when people API responds with non-related emails', async () => {
+      //Prepare test payload
+      const result = [{
+        metadata: { paging: {total_pages:1, current_page:1}},
+        data:[{email_address:'testexample@example.com'},
+        {email_address:'another@gmail.com'},
+        {email_address:'testexampel_here@outlook.com.es'},
+        {email_address:'another.example.not.duplicate@example.com'}]}];
+      
+      jest.spyOn(peopleService,'listAll').mockImplementation(async ()=> result);
+      expect(await peopleCotroller.getDuplicates()).toEqual({
+        groups:[]
+      });
+    });
+
+    it('should handle the Salesloft API exceptions', async (done) => {
+      //Prepare test payload (Exception)
+      const response = new HttpException('Invalid Parameter',422);
+
+      jest.spyOn(peopleService,'listAll').mockImplementation(() => new Promise((resolve,reject)=>reject(response)));
+
+      peopleCotroller.getDuplicates().catch(error=>{expect(error.response).toBe('Salesloft API Error'); done();});
+    });
+  });
 
   
 });
