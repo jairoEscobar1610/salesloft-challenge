@@ -1,4 +1,4 @@
-<h1>Salesloft Interview Challenge - NestJS and Angular
+<h1>SalesLoft Interview Challenge - NestJS and Angular
   
 </h1>
 <p>

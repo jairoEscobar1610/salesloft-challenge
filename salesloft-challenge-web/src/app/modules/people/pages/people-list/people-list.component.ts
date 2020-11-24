@@ -73,7 +73,7 @@ export class PeopleListComponent implements OnInit, OnDestroy, AfterViewInit {
       }, error => {
         // Error exists
         console.log(error);
-        this.peopleListErrorMsg = 'Cannot connect to the Salesloft API. Please try again later';
+        this.peopleListErrorMsg = 'Cannot connect to the SalesLoft API. Please try again later';
         this.spinner.hide();
       }, () => {
         this.spinner.hide();
