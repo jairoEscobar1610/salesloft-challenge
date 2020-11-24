@@ -10,40 +10,8 @@ jobs:
       - node/install-packages
       - run:
           command: npm run test
-  build-and-test-client:
-    executor:
-      name: node/default
-    steps:
-      - run:
-          command: cd salesloft-challenge-web
-      # Restore local dependencies from cache
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "package-lock.json" }}
-            - v1-dependencies-
-      # Install project dependencies
-      - run:
-          name: Install local dependencies
-          command: npm install
-      # Cache local dependencies if they don't exist
-      - save_cache:
-          key: v1-dependencies-{{ checksum "package-lock.json" }}
-          paths:
-            - node_modules
-      # Lint the source code
-      - run:
-          name: Linting
-          command: npm run lint
-      # Test the source code
-      - run:
-          name: Testing
-          command: npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
-      # End to End test
-      - run:
-          name: End to End Test
-          command: npm run e2e -- --protractor-config=e2e/protractor-ci.conf.js
 workflows:
   build-and-test:
     jobs:
       - build-and-test
-      - build-and-test-client
+      
