@@ -6,6 +6,8 @@ import { PeopleListDTO } from 'common/validators/people-list.dto';
 import { response } from 'express';
 import { Person } from './people.entity';
 import { PeopleService } from './people.service';
+import { jaroWrinkerTest, stringSimilarityArray } from 'common/helpers/string-similarity.helper';
+import { flatten } from 'common/helpers/array.helper';
 
 @Controller('api/people')
 @ApiTags('people')
@@ -20,7 +22,7 @@ export class PeopleController {
     @Get('list')
     @ApiResponse({ status: 200, description: 'Successful Response' })
     @ApiResponse({ status: 400, description: 'Bad Request' })
-    @ApiResponse({ status: 422, description: 'Salesloft API Error' })
+    @ApiResponse({ status: 422, description: 'Salesloft Parameter API Error' })
     @ApiResponse({ status: 500, description: 'Unexpected API Error' })
     async getPeopleList(@Query() query: PeopleListDTO): Promise<any> {
         const {page, sort_by, sort_direction,per_page} = query;
@@ -39,15 +41,16 @@ export class PeopleController {
 
     /**
      * Get People List character frequency using Salesloft API
-     * @returns response<People[]>
+     * @returns response<CharacterFrequency[]>
      */
     @Get('character-frequency')
     @ApiResponse({ status: 200, description: 'Successful Response' })
     @ApiResponse({ status: 400, description: 'Bad Request' })
-    @ApiResponse({ status: 422, description: 'Salesloft API Error' })
+    @ApiResponse({ status: 422, description: 'Salesloft Parameter API Error' })
     @ApiResponse({ status: 500, description: 'Unexpected API Error' })
     async getCharacterFrequency(): Promise<any> {
         try{
+            const listChunkSize = 50;
             let resultSet:any = {};
             let responses = [];
             let ControlledPromise = require('bluebird');
@@ -58,11 +61,9 @@ export class PeopleController {
                 responses = cachedResponses;
             }else{
                 //Store in cache 
-                responses = await this.peopleService.listAll();
+                responses = await this.peopleService.listAll(listChunkSize);
                 await this.cacheManager.set('people:list:all',responses,{ttl:10000});
             }
-            
-
             
 
             //Split characters and store them in Map - concurrent O(nk)
@@ -74,7 +75,6 @@ export class PeopleController {
                 ),
                 {concurrency:20}
             );
-
            
             //Transform resultset into array to be sorted O(n)
             let arraySet = Object.keys(resultSet.frequency).map(key=>({key,frequency:resultSet.frequency[key]}));
@@ -84,7 +84,51 @@ export class PeopleController {
             
             return sortedSet;
         }catch(error){
-            console.log(error);
+            if(error && error.response){
+                throw new HttpException('Salesloft API Error',error.response.status);
+            }else{
+                throw new HttpException('Unexpected API Error',HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
+
+    }
+
+     /**
+     * Get People List posible duplicates using Salesloft API
+     * @returns response<Groups[]>
+     */
+    @Get('duplicates')
+    @ApiResponse({ status: 200, description: 'Successful Response' })
+    @ApiResponse({ status: 400, description: 'Bad Request' })
+    @ApiResponse({ status: 422, description: 'Salesloft Parameter API Error' })
+    @ApiResponse({ status: 500, description: 'Unexpected API Error' })
+    async getDuplicates(): Promise<any> {
+        try{
+            const listChunkSize = 50;
+            let responses = [];
+
+            //Get all possible values
+            const cachedResponses = await this.cacheManager.get('people:list:all')
+            if(cachedResponses){
+                responses = cachedResponses;
+            }else{
+                //Store in cache 
+                responses = await this.peopleService.listAll(listChunkSize);
+                await this.cacheManager.set('people:list:all',responses,{ttl:10000});
+            }
+
+            //Generate array only from the People data
+            let flattenResponses = flatten(responses,'data');
+
+            
+            //Run the string similarity algorithm against the results
+            let results = await stringSimilarityArray(flattenResponses,
+                (value: any, index) => value.email_address,
+                jaroWrinkerTest
+            );
+            
+            return results;
+        }catch(error){
             if(error && error.response){
                 throw new HttpException('Salesloft API Error',error.response.status);
             }else{

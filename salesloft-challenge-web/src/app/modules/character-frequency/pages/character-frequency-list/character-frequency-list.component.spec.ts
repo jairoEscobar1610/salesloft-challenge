@@ -30,13 +30,12 @@ describe('CharacterFrequencyListComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-  it('should bind list of character frequencies', async() => {
+  it('should bind list of character frequencies', () => {
     expect(component.elements[0].key).toBeTruthy();
   });
 
 
   it('should display the error message', async() => {
-    fixture = TestBed.createComponent(CharacterFrequencyListComponent);
     component = fixture.componentInstance;
     component.errorMsg = "Sample error"
     fixture.detectChanges();

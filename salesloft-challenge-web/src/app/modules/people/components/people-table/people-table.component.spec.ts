@@ -37,7 +37,6 @@ describe('PeopleTableComponent', () => {
 
   it('should display all the people on the table', async () => {
     
-    let fixture = TestBed.createComponent(PeopleTableComponent);
     component = fixture.componentInstance;
     component.setDataSource(mockPeopleList);
     fixture.detectChanges();
@@ -52,7 +51,6 @@ describe('PeopleTableComponent', () => {
 
   it('should display correct columns for people data', async () => {
     
-    let fixture = TestBed.createComponent(PeopleTableComponent);
     fixture.detectChanges();
     fixture.whenStable().then(() => {
       fixture.detectChanges();

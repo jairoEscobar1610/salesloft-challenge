@@ -52,6 +52,19 @@ export class PeopleService {
   }
 
   /**
+   * @description Get possible duplicates from  People API
+   */
+  getPossibleDuplicates (): Observable<any> {
+    const url = `${this.apiUrl}/people/duplicates`;
+
+    return this.http.get<any[]>(url)
+      .pipe(
+        tap(_ => this.log('fetched duplicates')),
+        catchError(this.handleError('getPossibleDuplicates', []))
+      );
+  }
+
+  /**
    * Handle Http operation that failed.
    * Let the app continue.
    * @param operation - name of the operation that failed
