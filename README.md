@@ -1,4 +1,4 @@
-<h1>Salesloft Interview Challenge - NestJS and Angular
+<h1>SalesLoft Interview Challenge - NestJS and Angular
   
 </h1>
 <p>
@@ -31,14 +31,15 @@ Challenge taken with ❤️ by Jairo Escobar.
 
 ### Outside Docker containers
 
-- Create .env file `cp .env.example .env` and replace existing env variables
+- Create .env file `cp .env.example .env` and replace existing env variables (Only the APP and SalesLoft variables are required)
 - Install dependencies `yarn`
 - Start the app `yarn start` or `npm start` (app will be exposed through the port 3000)
 - Use `yarn start:dev` or `yarn start:debug` to watch for changes
 
 ### Inside Docker containers
 
-Just run already prepared bash script:
+- Create .env file `cp .env.example .env` and replace existing env variables (Only the APP and SalesLoft variables are required)
+Run the already prepared bash script:
 ```bash
 $ ./init
 ```
@@ -47,7 +48,7 @@ The NestJS app running in dev mode will be exposed on `http://localhost` (port 8
 
 For IDE autocompletion to work, run `yarn` on the host machine.
 
-For non-linux environment, just run `docker-compose up -d` on the root directory
+For non-linux environments, run `docker-compose up -d` on the root directory
 
 ### Test and 
 
@@ -87,7 +88,7 @@ To see all available endpoints visit http://localhost/api/docs
 
 Move to the `salesloft-challenge-web` directory to start the setup.
 
-Modify the `src/environments/environment.ts` and `src/environments/environment.prod.ts` files to point into the correct API url.
+Modify the `src/environments/environment.ts` and `src/environments/environment.prod.ts` files to point to the correct API url.
 
 Install the `npm` packages described in the `package.json` and verify that it works:
 
