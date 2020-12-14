@@ -1,23 +1,19 @@
 import { CACHE_MANAGER, Controller, Get, HttpException, HttpStatus, Inject, Logger, Query, Request } from '@nestjs/common';
-import { Cache } from 'cache-manager';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { stringCharFrequency } from 'common/helpers/character-classificator.helper';
 import { PeopleListDTO } from 'common/validators/people-list.dto';
-import { response } from 'express';
-import { Person } from './people.entity';
 import { PeopleService } from './people.service';
 import { jaroWrinkerTest, stringSimilarityArray } from 'common/helpers/string-similarity.helper';
 import { flatten } from 'common/helpers/array.helper';
 import { SalesloftConfigService } from 'config/vendors/salesloft';
-import { AppConfigService } from 'config/app';
 
 @Controller('api/people')
 @ApiTags('people')
 export class PeopleController {
     private readonly logger = new Logger(PeopleController.name);
 
-    constructor(private readonly peopleService: PeopleService, @Inject(CACHE_MANAGER) private cacheManager: Cache,
-        private salesloftConfigService: SalesloftConfigService, private appConfigService: AppConfigService) { }
+    constructor(private readonly peopleService: PeopleService,
+        private salesloftConfigService: SalesloftConfigService) { }
 
     /**
      * Get People List using Salesloft API
