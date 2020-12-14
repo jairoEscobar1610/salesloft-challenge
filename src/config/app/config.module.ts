@@ -19,6 +19,9 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
           .default('dev'),
         APP_URL: Joi.string().default('http://localhost'),
         APP_PORT: Joi.number().default(3000),
+        APP_REQUEST_LIMIT: Joi.number(),
+        APP_REQUEST_LIMIT_WINDOW: Joi.number(),
+        APP_CACHE_TTL: Joi.number().default(7200)
       }),
     }),
   ],

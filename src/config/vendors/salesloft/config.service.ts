@@ -25,4 +25,12 @@ export class SalesloftConfigService {
     return Number(this.configService.get<number>(`salesloft.duplicateThreshold`));
   }
 
+  get peopleListConcurrency(): number {
+    return Number(this.configService.get<number>(`salesloft.peopleListConcurrency`));
+  }
+
+  get peopleListPerPage(): number {
+    return Number(this.configService.get<number>(`salesloft.peopleListPerPage`));
+  }
+
 }

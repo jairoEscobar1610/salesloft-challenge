@@ -57,7 +57,7 @@ export function jaroWrinkerTest(s1: string, s2: string): number {
     let t = 0;
     let s2Pointer: number = 0;
 
-    // Calculate occurances where one character matches between two other matched characters indexes
+    // Calculate occurences where one character matches between two other matched characters indexes
     for (let i = 0; i < s1.length; i++) {
         if (s1MatchHash[i] === 1) {
             // Next match in s2

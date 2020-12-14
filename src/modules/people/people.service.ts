@@ -1,12 +1,16 @@
 import * as crypto from 'crypto';
-import { Injectable, NotAcceptableException } from '@nestjs/common';
+import { CACHE_MANAGER, Inject, Injectable, NotAcceptableException } from '@nestjs/common';
 import { SalesloftPeopleService } from 'providers/vendors/salesloft/people/people.service';
 import { PeopleListDTO } from 'common/validators/people-list.dto';
-import { AxiosResponse } from 'axios';
+import { Cache } from 'cache-manager';
+import * as moment from 'moment'
+import { AppConfigService } from 'config/app';
+import { initialize } from 'common/helpers/array.helper';
 
 @Injectable()
 export class PeopleService {
-  constructor(private readonly peopleAPIService: SalesloftPeopleService) { }
+  constructor(private readonly peopleAPIService: SalesloftPeopleService,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache, private appConfigService: AppConfigService) { }
 
   /**
    * Get People list for the given parameters
@@ -22,33 +26,65 @@ export class PeopleService {
   /**
    * Get all available people, performing multiple requests
    * @param chunkSize elements per response
+   * @param concurrency number of concurrent requests
    * @returns [salesloftPeopleResponse]
    */
-  async listAll(chunkSize: number = 50) {
-    let page = 1; // Initial value
-    let total_pages = 0;
-    const splitOperations = []; // To perform Promise.all
+  async listAll(chunkSize: number = 50, concurrency: number = 20) {
     const ControlledPromise = require('bluebird');
+    let splitOperations = []; // To perform Promise.all
+    const page = 1; // Initial value
+    let total_pages = 0;
+    let peopleListQuery: PeopleListDTO = { page, per_page: chunkSize };
+
+    // Check for existing data on cache
+    const cachedResponses = await this.cacheManager.get('people:list:all');
+    // If there is existing data
+    if (cachedResponses) {
+      // Check the difference between current datetime and previously stored timestamp
+      if (moment(cachedResponses.timestamp).add(30, 'seconds').isAfter(new Date())) {
+        // If less than 30 seconds, return the current data
+        return cachedResponses.data;
+      }
+
+      // If greater than 1 minute, modify the people list query to get the latest data only
+      peopleListQuery = {
+        ...peopleListQuery,
+        sort_by: 'updated_at',
+        sort_direction: 'ASC',
+        'updated_at[gt]': cachedResponses.timestamp
+      }
+    }
 
     // Perform first checking
-    const response = await this.peopleAPIService.list({ page, per_page: chunkSize }).toPromise();
+    const response = await this.peopleAPIService.list(peopleListQuery).toPromise();
 
     // If response is empty
     if (!response.data || response.data.length === 0) {
-      return [];
+      return (cachedResponses ? cachedResponses.data : []);
     }
-    total_pages = response.data.metadata.paging.total_pages;
-    page = response.data.metadata.paging.current_page;
 
-    splitOperations.length = total_pages - 1;
-    splitOperations.fill(0); // This is going to be used for 'concurrent' iterations
+    // Get total pages
+    total_pages = response.data.metadata.paging.total_pages;
+
+    // Initialize array to perform concurrent requests
+    splitOperations = initialize(splitOperations, Math.max(0, total_pages - 1), 0);
 
     // Get all possible values
     const responses = await ControlledPromise.map(splitOperations,
       (val, index) => this.peopleAPIService.list({ page: (index + 2), per_page: chunkSize }).toPromise(),
-      { concurrency: 20 }
+      { concurrency }
     );
 
-    return [response, ...responses].map(res => res.data);
+    // Merge first request, cached data and new data
+    const mergedResponses = [response, ...responses].map(res => res.data);
+
+    // Merge cached response
+    const peopleList = [ ...(cachedResponses ? cachedResponses.data : []), ...mergedResponses];
+
+    await this.cacheManager.set('people:list:all',
+      { timestamp: new Date(), data: peopleList },
+      { ttl: this.appConfigService.cacheTTL || 7600 }); // Store in cache
+
+    return peopleList;
   }
 }

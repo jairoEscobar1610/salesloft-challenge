@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 
 import { SalesloftProviderModule } from 'providers/vendors/salesloft/salesloft.module';
 import { SalesloftConfigModule } from 'config/vendors/salesloft';
+import { AppConfigModule } from 'config/app';
 import { PeopleController } from './people.controller';
 import { PeopleService } from './people.service';
 import { People } from "./../../common/models/people.model";
@@ -14,7 +15,7 @@ describe('PeopleController', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports:[SalesloftProviderModule, SalesloftConfigModule, CacheModule.register()],
+      imports:[SalesloftProviderModule, SalesloftConfigModule, AppConfigModule, CacheModule.register()],
       controllers: [PeopleController],
       providers: [PeopleService]
     }).compile();
@@ -155,7 +156,7 @@ describe('PeopleController', () => {
 
       jest.spyOn(peopleService,'listAll').mockImplementation(() => new Promise((resolve,reject)=>reject(response)));
 
-      peopleCotroller.getCharacterFrequency().catch(error=>{expect(error.response).toBe('Unexpected API Error'); done();});
+      peopleCotroller.getDuplicates().catch(error=>{expect(error.response).toBe('Unexpected API Error'); done();});
       
     });
   });

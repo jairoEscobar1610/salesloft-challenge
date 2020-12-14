@@ -24,4 +24,9 @@ export class PeopleListDTO {
     @IsOptional()
     @IsString()
     sort_direction?: string;
+
+    @ApiPropertyOptional({ description: 'SalesLoft People - updated_at filter - greater than a given date' })
+    @IsOptional()
+    @IsString()
+    'updated_at[gt]'?: string;
 }
