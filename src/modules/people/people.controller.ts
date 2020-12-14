@@ -76,7 +76,7 @@ export class PeopleController {
                     (value: any) => value.email_address,
                     resultSet
                 ),
-                { concurrency: 20 }
+                { concurrency: listRequestConcurrency }
             );
 
             // Transform resultset into array to be sorted O(n)
