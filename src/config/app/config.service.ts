@@ -25,6 +25,18 @@ export class AppConfigService {
     return Number(this.configService.get<number>(`app.port`));
   }
 
+  get requestLimit(): number {
+    return Number(this.configService.get<number>(`app.requestLimit`));
+  }
+
+  get requestLimitWindow(): number {
+    return Number(this.configService.get<number>(`app.requestLimitWindow`));
+  }
+
+  get cacheTTL(): number {
+    return Number(this.configService.get<number>(`app.cacheTTL`));
+  }
+
   isEnv(env: string) {
     return this.configService.get<string>(`app.env`) === env;
   }

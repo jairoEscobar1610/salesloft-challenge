@@ -22,9 +22,10 @@ export class PeopleService {
   /**
    * Get all available people, performing multiple requests
    * @param chunkSize elements per response
+   * @param concurrency number of concurrent requests
    * @returns [salesloftPeopleResponse]
    */
-  async listAll(chunkSize: number = 50) {
+  async listAll(chunkSize: number = 50, concurrency: number = 20) {
     let page = 1; // Initial value
     let total_pages = 0;
     const splitOperations = []; // To perform Promise.all
@@ -46,7 +47,7 @@ export class PeopleService {
     // Get all possible values
     const responses = await ControlledPromise.map(splitOperations,
       (val, index) => this.peopleAPIService.list({ page: (index + 2), per_page: chunkSize }).toPromise(),
-      { concurrency: 20 }
+      { concurrency }
     );
 
     return [response, ...responses].map(res => res.data);

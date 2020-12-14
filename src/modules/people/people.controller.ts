@@ -9,12 +9,13 @@ import { PeopleService } from './people.service';
 import { jaroWrinkerTest, stringSimilarityArray } from 'common/helpers/string-similarity.helper';
 import { flatten } from 'common/helpers/array.helper';
 import { SalesloftConfigService } from 'config/vendors/salesloft';
+import { AppConfigService } from 'config/app';
 
 @Controller('api/people')
 @ApiTags('people')
 export class PeopleController {
     constructor(private readonly peopleService: PeopleService, @Inject(CACHE_MANAGER) private cacheManager: Cache,
-        private salesloftConfigService: SalesloftConfigService) { }
+        private salesloftConfigService: SalesloftConfigService, private appConfigService: AppConfigService) { }
 
     /**
      * Get People List using Salesloft API
@@ -53,7 +54,8 @@ export class PeopleController {
     @ApiResponse({ status: 500, description: 'Unexpected API Error' })
     async getCharacterFrequency(): Promise<any> {
         try {
-            const listChunkSize = 50;
+            const listChunkSize = this.salesloftConfigService.peopleListPerPage || 50;
+            const listRequestConcurrency = this.salesloftConfigService.peopleListConcurrency || 20;
             /* tslint:disable-next-line */
             let resultSet: any = {};
             let responses = [];
@@ -64,8 +66,8 @@ export class PeopleController {
             if (cachedResponses) {
                 responses = cachedResponses;
             } else {
-                responses = await this.peopleService.listAll(listChunkSize);
-                await this.cacheManager.set('people:list:all', responses, { ttl: 10000 }); // Store in cache
+                responses = await this.peopleService.listAll(listChunkSize, listRequestConcurrency);
+                await this.cacheManager.set('people:list:all', responses, { ttl: this.appConfigService.cacheTTL || 7600 }); // Store in cache
             }
 
 
@@ -107,7 +109,8 @@ export class PeopleController {
     @ApiResponse({ status: 500, description: 'Unexpected API Error' })
     async getDuplicates(): Promise<any> {
         try {
-            const listChunkSize = 50;
+            const listChunkSize = this.salesloftConfigService.peopleListPerPage || 50;
+            const listRequestConcurrency = this.salesloftConfigService.peopleListConcurrency || 20;
             let responses = [];
 
             // Get all possible values
@@ -115,8 +118,8 @@ export class PeopleController {
             if (cachedResponses) {
                 responses = cachedResponses;
             } else {
-                responses = await this.peopleService.listAll(listChunkSize);
-                await this.cacheManager.set('people:list:all', responses, { ttl: 10000 }); // Store in cache
+                responses = await this.peopleService.listAll(listChunkSize, listRequestConcurrency);
+                await this.cacheManager.set('people:list:all', responses, { ttl: this.appConfigService.cacheTTL || 7600 }); // Store in cache
             }
 
             // Generate array only from the People data
