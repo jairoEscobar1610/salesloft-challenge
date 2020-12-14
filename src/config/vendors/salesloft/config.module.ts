@@ -15,7 +15,9 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       validationSchema: Joi.object({
         SALESLOFT_API_KEY: Joi.string(),
         SALESLOFT_API_URL: Joi.string().default('https://api.salesloft.com/v2/'),
-        SALESLOFT_DUPLICATE_THRESHOLD: Joi.number()
+        SALESLOFT_DUPLICATE_THRESHOLD: Joi.number(),
+        SALESLOFT_PEOPLE_LIST_CONCURRENCY: Joi.number().default(20),
+        SALESLOFT_PEOPLE_LIST_PER_PAGE: Joi.number().default(100)
       }),
     }),
   ],
