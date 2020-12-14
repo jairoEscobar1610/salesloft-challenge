@@ -156,7 +156,7 @@ describe('PeopleController', () => {
 
       jest.spyOn(peopleService,'listAll').mockImplementation(() => new Promise((resolve,reject)=>reject(response)));
 
-      peopleCotroller.getCharacterFrequency().catch(error=>{expect(error.response).toBe('Unexpected API Error'); done();});
+      peopleCotroller.getDuplicates().catch(error=>{expect(error.response).toBe('Unexpected API Error'); done();});
       
     });
   });
