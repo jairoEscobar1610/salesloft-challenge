@@ -24,12 +24,12 @@ async function bootstrap() {
   app.useGlobalPipes(
     new ValidationPipe({
       /*
-            If set to true, instead of stripping non-whitelisted 
+            If set to true, instead of stripping non-whitelisted
             properties validator will throw an exception.
       */
       forbidNonWhitelisted: true,
       /*
-            If set to true, validator will strip validated (returned) 
+            If set to true, validator will strip validated (returned)
             object of any properties that do not use any validation decorators.
       */
       whitelist: true,
