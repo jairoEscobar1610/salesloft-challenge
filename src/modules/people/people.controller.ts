@@ -1,21 +1,19 @@
-import { CACHE_MANAGER, Controller, Get, HttpException, HttpStatus, Inject, Query, Request } from '@nestjs/common';
-import { Cache } from 'cache-manager';
+import { CACHE_MANAGER, Controller, Get, HttpException, HttpStatus, Inject, Logger, Query, Request } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { stringCharFrequency } from 'common/helpers/character-classificator.helper';
 import { PeopleListDTO } from 'common/validators/people-list.dto';
-import { response } from 'express';
-import { Person } from './people.entity';
 import { PeopleService } from './people.service';
 import { jaroWrinkerTest, stringSimilarityArray } from 'common/helpers/string-similarity.helper';
 import { flatten } from 'common/helpers/array.helper';
 import { SalesloftConfigService } from 'config/vendors/salesloft';
-import { AppConfigService } from 'config/app';
 
 @Controller('api/people')
 @ApiTags('people')
 export class PeopleController {
-    constructor(private readonly peopleService: PeopleService, @Inject(CACHE_MANAGER) private cacheManager: Cache,
-        private salesloftConfigService: SalesloftConfigService, private appConfigService: AppConfigService) { }
+    private readonly logger = new Logger(PeopleController.name);
+
+    constructor(private readonly peopleService: PeopleService,
+        private salesloftConfigService: SalesloftConfigService) { }
 
     /**
      * Get People List using Salesloft API
@@ -37,6 +35,8 @@ export class PeopleController {
             if (error && error.response) {
                 throw new HttpException('Salesloft API Error', error.response.status);
             } else {
+                // TODO: Implement decoupled logger system
+                this.logger.error('getPeopleList Error:',error);
                 throw new HttpException('Unexpected API Error', HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
@@ -62,13 +62,7 @@ export class PeopleController {
             const ControlledPromise = require('bluebird');
 
             // Get all possible values
-            const cachedResponses = await this.cacheManager.get('people:list:all')
-            if (cachedResponses) {
-                responses = cachedResponses;
-            } else {
-                responses = await this.peopleService.listAll(listChunkSize, listRequestConcurrency);
-                await this.cacheManager.set('people:list:all', responses, { ttl: this.appConfigService.cacheTTL || 7600 }); // Store in cache
-            }
+            responses = await this.peopleService.listAll(listChunkSize, listRequestConcurrency);
 
 
             // Split characters and store them in Map - concurrent O(nk)
@@ -78,7 +72,7 @@ export class PeopleController {
                     (value: any) => value.email_address,
                     resultSet
                 ),
-                { concurrency: 20 }
+                { concurrency: listRequestConcurrency }
             );
 
             // Transform resultset into array to be sorted O(n)
@@ -92,6 +86,8 @@ export class PeopleController {
             if (error && error.response) {
                 throw new HttpException('Salesloft API Error', error.response.status);
             } else {
+                // TODO: Implement decoupled logger system
+                this.logger.error('getCharacterFrequency Error:',error);
                 throw new HttpException('Unexpected API Error', HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
@@ -114,13 +110,7 @@ export class PeopleController {
             let responses = [];
 
             // Get all possible values
-            const cachedResponses = await this.cacheManager.get('people:list:all')
-            if (cachedResponses) {
-                responses = cachedResponses;
-            } else {
-                responses = await this.peopleService.listAll(listChunkSize, listRequestConcurrency);
-                await this.cacheManager.set('people:list:all', responses, { ttl: this.appConfigService.cacheTTL || 7600 }); // Store in cache
-            }
+            responses = await this.peopleService.listAll(listChunkSize, listRequestConcurrency);
 
             // Generate array only from the People data
             /* tslint:disable-next-line */
@@ -133,12 +123,13 @@ export class PeopleController {
                 jaroWrinkerTest,
                 (this.salesloftConfigService.duplicateThreshold || 0.95)
             );
-
             return results;
         } catch (error) {
             if (error && error.response) {
                 throw new HttpException('Salesloft API Error', error.response.status);
             } else {
+                // TODO: Implement decoupled logger system
+                this.logger.error('getDuplicates Error:',error);
                 throw new HttpException('Unexpected API Error', HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }

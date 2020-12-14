@@ -5,6 +5,7 @@ import { SalesloftPeopleService } from 'providers/vendors/salesloft/people/peopl
 import { PeopleService } from './people.service';
 import { People } from "../../common/models/people.model";
 import { CacheModule, HttpException } from '@nestjs/common';
+import { AppConfigModule } from 'config/app';
 import { AxiosResponse } from 'axios';
 import { axios200, axios422, axiosResponses, axiosResposeWithData } from 'common/mockups/axios-response.mockup';
 import { Observable, of } from 'rxjs';
@@ -15,7 +16,7 @@ describe('PeopleService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [SalesloftProviderModule, CacheModule.register()],
+      imports: [SalesloftProviderModule, AppConfigModule, CacheModule.register()],
       controllers: [],
       providers: [PeopleService]
     }).compile();
